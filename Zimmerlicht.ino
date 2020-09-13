@@ -45,10 +45,15 @@ IPAddress dns(gateway);
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE + 1]; //buffer to hold incoming packet,
 char  replyBuffer[UDP_TX_PACKET_MAX_SIZE + 1];       // a string to send back
 
-//bitmasks; 0000 = debug; 0001 = waiting for single color (room light); 0010 = bu2bl input; 0100 = rainbow
-char mode = 0;
+//optcodes; 
+//0000 = boot/debug; 
+//0001 = modify color, r, g, b;
+//0010 = brightness absolute; 0011 = brighness relative;
+//0100 = bu2bl input; 0101 = rainbow;
 
+char mode = 0;
 int r, g, b, w;
+int brt = 255;
 
 int packetCount = 0;
 unsigned long previousTime = 0;
@@ -86,16 +91,20 @@ int getPacket()
     }else{
       w = 0; r = packetBuffer[1]*4; g = packetBuffer[2]*4; b = packetBuffer[3]*4;
     }
-    
-    //update Colors
-    analogWrite(LEDR, r);
-    analogWrite(LEDG, g);
-    analogWrite(LEDB, b);
-    analogWrite(LEDW, w);
     packetCount++;
     previousTime=millis(); //update time of last packet
   }
   return packetSize;
+}
+void updateColors()
+{
+  analogWrite(LEDR, (r*brt)/255);
+  analogWrite(LEDG, (g*brt)/255);
+  analogWrite(LEDB, (b*brt)/255);
+  analogWrite(LEDW, (w*brt)/255);
+  char string[64];
+  snprintf(string, 64, "c: %u, %u, %u, %u\n", (r*brt)/255, (g*brt)/255, (b*brt)/255, (w*brt)/255);
+  sendPacket(string);
 }
 
 void sendPacket(char*string)
@@ -169,24 +178,25 @@ void loop()
 {
   switch(mode)
   { 
-    case 0: // Debug
-    digitalWrite(LEDR, HIGH);
-    digitalWrite(LEDG, HIGH);
-    digitalWrite(LEDB, HIGH);
-    digitalWrite(LEDW, HIGH);
-    getPacket();
+    case 0: // Boot/Debug
+      brt = 255;
+      r = 0; g = 0; b = 0; w = 255;
+      updateColors();
+      mode = 1;
     break;
     case 1: // Room Light
-    getPacket();
+      if(getPacket())
+        updateColors();
     break;
     case 2: // Bu2Bl2
-    getPacket();
+      if(getPacket())
+        updateColors();
 
-    if(millis()-previousTime > 5000 && packetCount){
-      Serial.printf("Haven't received Packet for five seconds, rebooting into light mode\n");
-      delay(10);
-      resetFunc();
-    }
+      if(millis()-previousTime > 5000 && packetCount){
+        Serial.printf("Haven't received Packet for five seconds, rebooting into light mode\n");
+        delay(10);
+        resetFunc();
+      }
     break;
   }
   
