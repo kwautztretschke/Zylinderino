@@ -103,6 +103,8 @@ int getPacket()
       break;
       case 1: //modify color
       r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
+      if(brt==0)
+        brt = 255;      
       break;
       case 2: //absolute brightness
       brt = packetBuffer[1];
