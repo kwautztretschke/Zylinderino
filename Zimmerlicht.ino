@@ -17,6 +17,9 @@
 //#define UDPREPLIES
 //#define PRINTPACKETS
 
+#define L_ZIMMER
+//#define L_SHISHA
+
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
@@ -27,13 +30,21 @@
 #define STAPSK  "***REMOVED***"
 #endif
 
-#define NETWORK_IP 175
+#ifdef L_ZIMMER
+  #define NETWORK_IP 175
+  #define LEDR 12
+  #define LEDG 14
+  #define LEDB 4
+  #define LEDW 5
+  #define LIGHTSWITCH 13
+#endif
 
-#define LEDR 12
-#define LEDG 14
-#define LEDB 4
-#define LEDW 5
-#define LIGHTSWITCH 13
+#ifdef L_SHISHA
+  #define NETWORK_IP 170
+  #define LEDR 4
+  #define LEDG 14
+  #define LEDB 5
+#endif  
 
 unsigned int localPort = 26091;      // local port to listen on
 //IPAddress broadcast=IPAddress(224, 0, 0, 69); // multicast address (SLOW AND GAY)
@@ -52,8 +63,8 @@ char  replyBuffer[UDP_TX_PACKET_MAX_SIZE + 1];       // a string to send back
 //0100 = bu2bl input; 0101 = rainbow;
 
 char mode = 0;
-int r, g, b, w;
-int brt = 255;
+int r, g, b;
+int brt = 100;
 
 int packetCount = 0;
 unsigned long previousTime = 0;
@@ -86,11 +97,7 @@ int getPacket()
     
     //parse Packet
     mode = packetBuffer[0];
-    if(mode==1&&(packetBuffer[1]==packetBuffer[2])&&(packetBuffer[2]==packetBuffer[3])){
-      w = packetBuffer[1]*4; r = 0; g = 0; b = 0;
-    }else{
-      w = 0; r = packetBuffer[1]*4; g = packetBuffer[2]*4; b = packetBuffer[3]*4;
-    }
+    r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
     packetCount++;
     previousTime=millis(); //update time of last packet
   }
@@ -98,13 +105,27 @@ int getPacket()
 }
 void updateColors()
 {
-  analogWrite(LEDR, (r*brt)/255);
-  analogWrite(LEDG, (g*brt)/255);
-  analogWrite(LEDB, (b*brt)/255);
-  analogWrite(LEDW, (w*brt)/255);
-  char string[64];
-  snprintf(string, 64, "c: %u, %u, %u, %u\n", (r*brt)/255, (g*brt)/255, (b*brt)/255, (w*brt)/255);
-  sendPacket(string);
+  #ifdef UDPREPLIES
+    char string[64];
+    snprintf(string, 64, "c: %u, %u, %u, %u\n", (r*brt)/255, (g*brt)/255, (b*brt)/255, (w*brt)/255);
+    sendPacket(string);
+  #endif
+
+  #ifdef L_ZIMMER
+    if(r==g&&g==b){
+      analogWrite(LEDW, (r*brt)/100);
+      digitalWrite(LEDR, LOW); digitalWrite(LEDG, LOW); digitalWrite(LEDB, LOW);
+    }else{
+      analogWrite(LEDR, (r*brt)/100);
+      analogWrite(LEDG, (g*brt)/100);
+      analogWrite(LEDB, (b*brt)/100);
+      digitalWrite(LEDW, LOW);
+    }
+  #else
+    analogWrite(LEDR, (r*brt)/100);
+    analogWrite(LEDG, (g*brt)/100);
+    analogWrite(LEDB, (b*brt)/100);
+  #endif
 }
 
 void sendPacket(char*string)
@@ -130,21 +151,29 @@ void setup() {
   Udp.begin(localPort);
 
 
-  // initialize the digital pin as an output.
+  // initialize pins
+  analogWriteRange(255);
   pinMode(LEDR, OUTPUT);
   pinMode(LEDG, OUTPUT);
   pinMode(LEDB, OUTPUT);
-  pinMode(LEDW, OUTPUT);
   digitalWrite(LEDR, LOW);
   digitalWrite(LEDG, LOW);
   digitalWrite(LEDB, LOW);
+  #ifdef L_ZIMMER
+  pinMode(LEDW, OUTPUT);
   digitalWrite(LEDW, LOW);
+  #endif
 
-    Serial.println("Send four bytes, first the mode, then the colors RGB");
-    Serial.println();
+  Serial.println("Send four bytes, first the opcode, then the colors RGB");
+  Serial.println();
 
   // OTA
+  #ifdef L_ZIMMER
   ArduinoOTA.setHostname("bernie-zimmerlicht");
+  #endif
+  #ifdef L_SHISHA
+  ArduinoOTA.setHostname("bernie-shisha");
+  #endif
   ArduinoOTA.setPassword("swag");
 
   ArduinoOTA.onStart([]() {
@@ -180,7 +209,7 @@ void loop()
   { 
     case 0: // Boot/Debug
       brt = 255;
-      r = 0; g = 0; b = 0; w = 255;
+      r = 255; g = 255; b = 255;
       updateColors();
       mode = 1;
     break;
