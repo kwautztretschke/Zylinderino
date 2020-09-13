@@ -47,7 +47,6 @@
 #endif  
 
 unsigned int localPort = 26091;      // local port to listen on
-//IPAddress broadcast=IPAddress(224, 0, 0, 69); // multicast address (SLOW AND GAY)
 IPAddress staticIP(10,96,0,NETWORK_IP), gateway (10,96,0,254); // ***REMOVED***
 IPAddress subnet(255,255,255,0);
 IPAddress dns(gateway);
@@ -58,9 +57,11 @@ char  replyBuffer[UDP_TX_PACKET_MAX_SIZE + 1];       // a string to send back
 
 //optcodes; 
 //0000 = boot/debug; 
-//0001 = modify color, r, g, b;
-//0010 = brightness absolute; 0011 = brighness relative;
-//0100 = bu2bl input; 0101 = rainbow;
+//0001 = modify color:  r,    g,    b;
+//0010 = brightness:    abs,  N/A,  N/A; 
+//0011 = brighness:     rel,  sign, N/A;
+//0100 = bu2bl input; 
+//0101 = rainbow;
 
 char mode = 0;
 int r, g, b;
@@ -96,8 +97,23 @@ int getPacket()
     #endif
     
     //parse Packet
-    mode = packetBuffer[0];
-    r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
+    switch(packetBuffer[0]){
+      case 0: //reboot
+      resetFunc();
+      break;
+      case 1: //modify color
+      r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
+      break;
+      case 2: //absolute brightness
+      brt = packetBuffer[1];
+      break;
+      case 3: //relative brightness
+      (!packetBuffer[2]) ? brt+=packetBuffer[1] : brt-=packetBuffer[1];
+      if(brt<0)   brt = 0;
+      if(brt>100) brt = 100;
+      break;
+    }
+    
     packetCount++;
     previousTime=millis(); //update time of last packet
   }
@@ -110,6 +126,8 @@ void updateColors()
     snprintf(string, 64, "c: %u, %u, %u, %u\n", (r*brt)/255, (g*brt)/255, (b*brt)/255, (w*brt)/255);
     sendPacket(string);
   #endif
+
+  //TODO: edge cases when rgb = 0 maybe (or is that for the parser?)
 
   #ifdef L_ZIMMER
     if(r==g&&g==b){
@@ -217,7 +235,7 @@ void loop()
       if(getPacket())
         updateColors();
     break;
-    case 2: // Bu2Bl2
+    case 4: // Bu2Bl2
       if(getPacket())
         updateColors();
 
