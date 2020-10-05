@@ -102,17 +102,25 @@ int getPacket()
       resetFunc();
       break;
       case 1: //modify color
+      mode = 1;
       r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
       if(brt==0)
-        brt = 255;      
+        brt = 100;      
       break;
       case 2: //absolute brightness
+      mode = 1;
       brt = packetBuffer[1];
       break;
       case 3: //relative brightness
+      mode = 1;
       (!packetBuffer[2]) ? brt+=packetBuffer[1] : brt-=packetBuffer[1];
       if(brt<0)   brt = 0;
       if(brt>100) brt = 100;
+      break;
+      case 4: //bu2bl2
+      mode = 4;
+      brt = 100;
+      r = packetBuffer[1]; g = packetBuffer[2]; b = packetBuffer[3];
       break;
     }
     
@@ -249,11 +257,12 @@ void loop()
     break;
   }
   
-  
+#if 0  
   if(WiFi.status() != WL_CONNECTED) {
     Serial.println("Wifi Disconnected!");
     delay(500);
   }
+#endif
 
   /*  OTA
    */
@@ -263,5 +272,5 @@ void loop()
 /*
   test (shell/netcat):
   --------------------
-	  nc -u 192.168.esp.address 8888
+	  nc -u 10.96.esp.address 26091
 */
