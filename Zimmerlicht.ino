@@ -162,41 +162,51 @@ void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
   #endif
 
 
-  if(fade){ //todo: actual millis() calculation (if not too expensive)
+  if(fade){
     for(int i=0; i<fade; i++){
       #ifdef L_ZIMMER
-        if(rgbN.r==rgbN.g&&rgbN.g==rgbN.b){ //white LED needs extra stuff
+        if((rgbN.r==rgbN.g&&rgbN.g==rgbN.b) && (rgbC.r==rgbC.g&&rgbC.g==rgbC.b)){ // both colors are white:
           analogWrite(LEDW, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
           digitalWrite(LEDR, LOW); 
           digitalWrite(LEDG, LOW); 
           digitalWrite(LEDB, LOW);
-        }else{ //update colors regularly
+        }else if((rgbN.r==rgbN.g&&rgbN.g==rgbN.b) && (rgbC.r!=rgbC.g||rgbC.g!=rgbC.b)){           // new color is white:
+          analogWrite(LEDW, (((rgbN.r*rgbN.brt)/100) * i)/fade);
+          analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i))/fade);
+          analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i))/fade);
+          analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i))/fade);
+        }else if((rgbC.r==rgbC.g&&rgbC.g==rgbC.b) && (rgbN.r!=rgbN.g||rgbN.g!=rgbN.b)){           // old color is white:
+          analogWrite(LEDW, (((rgbC.r*rgbC.brt)/100) * (fade-i))/fade);
+          analogWrite(LEDR, (((rgbN.r*rgbN.brt)/100) * i)/fade);
+          analogWrite(LEDG, (((rgbN.g*rgbN.brt)/100) * i)/fade);
+          analogWrite(LEDB, (((rgbN.b*rgbN.brt)/100) * i)/fade);
+        }else{                                                                // update colors regularly
           analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
           analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
           analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
           digitalWrite(LEDW, LOW);
         }
-      #else //update colors regularly
+      #else                                                                   // shisha, fade
         analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
         analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
         analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
       #endif
-      delay(1); //1 millisecond delay, total delay = fade;
+      delay(1);                                           // 1 millisecond delay, total delay = fade;
     }
-  }else{ //switch color immediately
-    #ifdef L_ZIMMER // white LED needs extra stuff
-      if(rgbN.r==rgbN.g&&rgbN.g==rgbN.b){
+  }else{        // switch color immediately
+    #ifdef L_ZIMMER 
+      if(rgbN.r==rgbN.g&&rgbN.g==rgbN.b){    //new color is white
         analogWrite(LEDW, (rgbN.r*rgbN.brt)/100);
         digitalWrite(LEDR, LOW); 
         digitalWrite(LEDG, LOW); 
         digitalWrite(LEDB, LOW);
-      }else{ //update colors regularly
+      }else{                                 // update colors regularly
         analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
         analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
         analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
         digitalWrite(LEDW, LOW);
       }
-    #else //update colors regularly
+    #else                                    // shisha, just update
       analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
       analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
       analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
