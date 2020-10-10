@@ -19,6 +19,7 @@
 
 #define L_ZIMMER
 //#define L_SHISHA
+//#define L_WHITEBOARD
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -31,6 +32,7 @@
 #endif
 
 #ifdef L_ZIMMER
+  #define L_RGBW
   #define NETWORK_IP 175
   #define LEDR 12
   #define LEDG 14
@@ -40,11 +42,20 @@
 #endif
 
 #ifdef L_SHISHA
+  #define L_RGB
   #define NETWORK_IP 170
   #define LEDR 4
   #define LEDG 14
   #define LEDB 5
 #endif  
+
+#ifdef L_WHITEBOARD
+  #define L_RGB
+  #define NETWORK_IP 172
+  #define LEDR 12
+  #define LEDG 13
+  #define LEDB 14
+#endif
 
 unsigned int localPort = 26091;      // local port to listen on
 IPAddress staticIP(10,96,0,NETWORK_IP), gateway (10,96,0,254); // ***REMOVED***
@@ -116,11 +127,14 @@ int getPacket(struct s_rgb *rgbN, struct s_rgb rgbC)
         rgbN->r = packetBuffer[1];
         rgbN->g = packetBuffer[2];
         rgbN->b = packetBuffer[3];
+        
+        #if 0
         if(rgbC.brt==0){ //if the light is off, a new color should turn it on
           rgbN->brt = 100;      
         }else{
           rgbN->brt = rgbC.brt;
         }
+        #endif
           
       break;
       
@@ -162,9 +176,9 @@ void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
   #endif
 
 
-  if(fade){
+  if(fade&&(rgbC.brt||rgbN.brt)){ //if the brightnesses are both 0, switch color immediately (for presets)
     for(int i=0; i<fade; i++){
-      #ifdef L_ZIMMER
+      #ifdef L_RGBW
         if((rgbN.r==rgbN.g&&rgbN.g==rgbN.b) && (rgbC.r==rgbC.g&&rgbC.g==rgbC.b)){ // both colors are white:
           analogWrite(LEDW, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
           digitalWrite(LEDR, LOW); 
@@ -186,7 +200,7 @@ void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
           analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
           digitalWrite(LEDW, LOW);
         }
-      #else                                                                   // shisha, fade
+      #else                                                                   // no WRGB fade
         analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
         analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
         analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
@@ -194,7 +208,7 @@ void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
       delay(1);                                           // 1 millisecond delay, total delay = fade;
     }
   }else{        // switch color immediately
-    #ifdef L_ZIMMER 
+    #ifdef L_RGBW
       if(rgbN.r==rgbN.g&&rgbN.g==rgbN.b){    //new color is white
         analogWrite(LEDW, (rgbN.r*rgbN.brt)/100);
         digitalWrite(LEDR, LOW); 
@@ -206,7 +220,7 @@ void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
         analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
         digitalWrite(LEDW, LOW);
       }
-    #else                                    // shisha, just update
+    #else                                    // no WRGB update
       analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
       analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
       analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
@@ -245,7 +259,7 @@ void setup() {
   digitalWrite(LEDR, LOW);
   digitalWrite(LEDG, LOW);
   digitalWrite(LEDB, LOW);
-  #ifdef L_ZIMMER
+  #ifdef L_RGBW
   pinMode(LEDW, OUTPUT);
   digitalWrite(LEDW, LOW);
   #endif
@@ -259,6 +273,9 @@ void setup() {
   #endif
   #ifdef L_SHISHA
   ArduinoOTA.setHostname("bernie-shisha");
+  #endif
+  #ifdef L_WHITEBOARD
+  ArduinoOTA.setHostname("bernie-whiteboard");
   #endif
   ArduinoOTA.setPassword("swag");
 
