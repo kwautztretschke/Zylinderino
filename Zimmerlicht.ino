@@ -17,9 +17,10 @@
 //#define UDPREPLIES
 //#define PRINTPACKETS
 
-#define L_ZIMMER
+//#define L_ZIMMER
 //#define L_SHISHA
 //#define L_WHITEBOARD
+#define L_TISCH
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -55,6 +56,14 @@
   #define LEDR 12
   #define LEDG 13
   #define LEDB 14
+#endif
+
+#ifdef L_TISCH
+  #define L_RGB
+  #define NETWORK_IP 171
+  #define LEDR 12
+  #define LEDG 14
+  #define LEDB 13
 #endif
 
 unsigned int localPort = 26091;      // local port to listen on
@@ -276,6 +285,9 @@ void setup() {
   #endif
   #ifdef L_WHITEBOARD
   ArduinoOTA.setHostname("bernie-whiteboard");
+  #endif
+  #ifdef L_TISCH
+  ArduinoOTA.setHostname("bernie-tisch");
   #endif
   ArduinoOTA.setPassword("swag");
 
