@@ -34,7 +34,7 @@
 
 #ifdef L_ZIMMER
   #define L_RGBW
-  #define NETWORK_IP 175
+  #define NETWORK_IP 75
   #define LEDR 12
   #define LEDG 14
   #define LEDB 4
@@ -44,7 +44,7 @@
 
 #ifdef L_SHISHA
   #define L_RGB
-  #define NETWORK_IP 170
+  #define NETWORK_IP 74
   #define LEDR 4
   #define LEDG 14
   #define LEDB 5
@@ -52,7 +52,7 @@
 
 #ifdef L_WHITEBOARD
   #define L_RGB
-  #define NETWORK_IP 172
+  #define NETWORK_IP 71
   #define LEDR 12
   #define LEDG 13
   #define LEDB 14
@@ -60,26 +60,27 @@
 
 #ifdef L_TISCH
   #define L_RGB
-  #define NETWORK_IP 171
+  #define NETWORK_IP 70
   #define LEDR 12
   #define LEDG 14
   #define LEDB 13
 #endif
 
 unsigned int localPort = 26091;      // local port to listen on
-IPAddress staticIP(10,96,0,NETWORK_IP), gateway (10,96,0,254); // ***REMOVED***
+IPAddress staticIP(10,69,0,NETWORK_IP), gateway (10,69,0,1);
 IPAddress subnet(255,255,255,0);
-IPAddress dns(gateway);
+//IPAddress dns(gateway);
 
 // buffers for receiving and sending data
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE + 1]; //buffer to hold incoming packet,
+#define PACKETBUFFERSIZE 4
+char packetBuffer[PACKETBUFFERSIZE]; //buffer to hold incoming packet,
 char  replyBuffer[UDP_TX_PACKET_MAX_SIZE + 1];       // a string to send back
 
-//optcodes; 
+//opcodes; 
 //0000 = boot/debug; 
 //0001 = modify color:  r,    g,    b;
 //0010 = brightness:    abs,  N/A,  N/A; 
-//0011 = brighness:     rel,  sign, N/A;
+//0011 = brightness:     rel,  sign, N/A;
 //0100 = bu2bl input; 
 //0101 = rainbow;
 
@@ -118,7 +119,7 @@ int getPacket(struct s_rgb *rgbN, struct s_rgb rgbC)
     #endif
 
     // read the packet into packetBufffer
-    int n = Udp.read(packetBuffer, UDP_TX_PACKET_MAX_SIZE);
+    int n = Udp.read(packetBuffer, PACKETBUFFERSIZE);
     packetBuffer[n] = 0;
     
     #ifdef PRINTPACKETS
@@ -248,7 +249,7 @@ void sendPacket(char*string)
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
-  WiFi.config(staticIP, gateway, subnet, dns);
+  if (!WiFi.config(staticIP, gateway, subnet)) Serial.println("STA Failed to configure");
   WiFi.begin(STASSID, STAPSK);
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
