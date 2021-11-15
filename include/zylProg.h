@@ -26,7 +26,7 @@ class zylProg{
 protected:
 	CRGB					m_FB[X_RES][Y_RES];
 public:
-	zylProg*					m_pNext = NULL;
+	zylProg*				m_pNext = NULL;
 
 	;						zylProg();
 	virtual int 			init(){}
