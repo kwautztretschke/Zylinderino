@@ -48,9 +48,7 @@ void zylProgManager::focus(int index)
 	g_pActive->activate();
 }
 
-void zylProgManager::input(uint8_t x, uint8_t y, uint8_t z) // I would strongly recommend int x,
-															// but there are bazillions of flys ...
-{
+void zylProgManager::input(uint8_t x, uint8_t y, uint8_t z){
 	g_pActive->input(x, y, z);
 }
 
