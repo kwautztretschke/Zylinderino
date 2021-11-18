@@ -160,7 +160,7 @@ void zylProgManager::renderPrograms()
 }
 
 //TODO merge with renderPrograms()
-void zylProgManager::composite(CRGB fb_in[X_RES][Y_RES])
+void zylProgManager::composite(zylFB fb_in)
 {	//composite programs in the renderqueue into a given framebuffer
 	//? maybe clear the framebuffer first?
 	zylProg* ptr = s_BG.m_pAbove;
@@ -170,22 +170,22 @@ void zylProgManager::composite(CRGB fb_in[X_RES][Y_RES])
 			for(int y=0;y<Y_RES;y++){
 				switch(ptr->m_CompositeMode){
 				case ZCM_SOLID:	//default
-					fb_in[x][y] = ptr->m_FB[x][y]; //TODO alpha, opacity
+					fb_in(x, y) = ptr->m_FB(x, y); //TODO alpha, opacity
 					break;
 				case ZCM_ADD:
-					fb_in[x][y] = 
-						fb_in[x][y]
-						+ ptr->m_FB[x][y]; //TODO alpha, opacity
+					fb_in(x, y) = 
+						fb_in(x, y)
+						+ ptr->m_FB(x, y); //TODO alpha, opacity
 					break;
 				case ZCM_SUB:
-					fb_in[x][y] = 
-						fb_in[x][y]
-						- ptr->m_FB[x][y]; //TODO alpha, opacity
+					fb_in(x, y) = 
+						fb_in(x, y)
+						- ptr->m_FB(x, y); //TODO alpha, opacity
 					break;
 				case ZCM_AVG:
-					fb_in[x][y] = 
-						fb_in[x][y]/2
-						+ ptr->m_FB[x][y]/2; //TODO alpha, opacity
+					fb_in(x, y) = 
+						fb_in(x, y)/2
+						+ ptr->m_FB(x, y)/2; //TODO alpha, opacity
 					break;
 				}
 			}

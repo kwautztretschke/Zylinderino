@@ -32,7 +32,7 @@
 static HARDWAREBACKEND 	s_HW;
 static zylWifi			s_Wifi;
 static zylUdp			s_Udp;
-static CRGB				s_FB[X_RES][Y_RES];
+static zylFB			s_FB;
 
 //*************************** Timer Interrupt ************************
 volatile bool 			g_vRenderFrame = 	false;
