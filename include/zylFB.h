@@ -15,6 +15,9 @@
 #include <FastLED.h>
 #include "config.h"
 
+
+//*************** Zylinder Pixel, inherited from FastLED *************************
+//				  (Syntax is also inherited, hence the inline functions)
 struct zylPel : CRGB {
     union {
 		struct {
@@ -41,58 +44,48 @@ struct zylPel : CRGB {
         };
 		uint8_t raw[4];
 	};
-	/// allow assignment from one ARGB struct to another //? probably inheritable from CRGB?
-	//inline zylPel& operator= (const zylPel& rhs) __attribute__((always_inline)) = default;
+    /// allow assignment from Alpha, R, G, and B
+	inline zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) __attribute__((always_inline)){
+		a = na; r = nr; g = ng; b = nb;
+        return *this;
+    }
 
-	/// constructor to set Alpha to max
-	inline zylPel() : CRGB(){
-		m_Alpha = 255;
+	inline zylPel& setAlpha (uint8_t na) __attribute__((always_inline)){
+		a = na;
+		return *this;
 	}
 
-    /// allow assignment from 32-bit 0xAARRGGBB color code
-	inline zylPel& operator= (const uint32_t colorcode) __attribute__((always_inline))
-    {
-		a = (colorcode >> 24) & 0xFF;
-        r = (colorcode >> 16) & 0xFF;
-        g = (colorcode >>  8) & 0xFF;
-        b = (colorcode >>  0) & 0xFF;
-        return *this;
-    }
-    /// allow assignment from Alpha, R, G, and B
-	inline zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) __attribute__((always_inline))
-    {
-		a = na;
-        r = nr;
-        g = ng;
-        b = nb;
-        return *this;
-    }
+	//? Apparently operators and constructors dont get inherited so here we go
+	inline zylPel(uint32_t colorcode) : CRGB(colorcode)
+		{a = 255;}
+	inline zylPel(CRGB c) : CRGB(c)
+		{a = 255;}
+	inline zylPel(uint8_t ir, uint8_t ig, uint8_t ib, uint8_t ia = 255) : CRGB(ir, ig, ib) 
+		{a = ia;}
+	inline zylPel(const zylPel& rhs) = default;
 
+	inline zylPel& operator= (const zylPel& rhs) = default;
+	inline zylPel& operator= (const uint32_t colorcode){*this = zylPel(colorcode);}
+	inline zylPel& operator= (const CRGB rhs){*this = zylPel(rhs);}
 };
 
 class zylFB {
 private:
 	zylPel				m_FB[X_RES][Y_RES];
 public:
-	zylPel&				xy(int x, int y){
-		return m_FB[x][y];
-	}
-	void				setAll(zylPel c){
-		for(int x=0;x<X_RES;x++)
-			for(int y=0;y<X_RES;y++)
-				m_FB[x][y]=c;
+	zylPel&				xy(int x, int y);
+	void				setAll(CRGB c);
+	void				setAlpha(uint8_t na);
+	zylPel&				operator()(int x, int y);
+	void				operator=(CRGB c);
+	;					zylFB(CRGB c);
+	;					zylFB();
+
+	void				test(){
+		xy(0, 0) = CRGB::Red;
+		xy(0, 0).addToRGB(5);
 	}
 
-	zylPel&				operator()(int x, int y)	{return xy(x,y);}
-	void				operator=(zylPel c)			{setAll(c);}
-	#if 0
-	class _all{
-		public:
-		void operator= (zylPel c){
-			setAll(c);
-		}
-	}; _all all;
-	#endif
 };
 
 #endif
