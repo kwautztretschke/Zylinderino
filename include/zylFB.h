@@ -44,29 +44,26 @@ struct zylPel : CRGB {
         };
 		uint8_t raw[4];
 	};
-    /// allow assignment from Alpha, R, G, and B
 	inline zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) __attribute__((always_inline)){
 		a = na; r = nr; g = ng; b = nb;
         return *this;
     }
-
 	inline zylPel& setAlpha (uint8_t na) __attribute__((always_inline)){
 		a = na;
 		return *this;
 	}
 
-	//? Apparently operators and constructors dont get inherited so here we go
-	inline zylPel(uint32_t colorcode) : CRGB(colorcode)
-		{a = 255;}
-	inline zylPel(CRGB c) : CRGB(c)
-		{a = 255;}
-	inline zylPel(uint8_t ir, uint8_t ig, uint8_t ib, uint8_t ia = 255) : CRGB(ir, ig, ib) 
-		{a = ia;}
-	inline zylPel(const zylPel& rhs) = default;
-
-	inline zylPel& operator= (const zylPel& rhs) = default;
-	inline zylPel& operator= (const uint32_t colorcode){*this = zylPel(colorcode);}
-	inline zylPel& operator= (const CRGB rhs){*this = zylPel(rhs);}
+	//? constructors dont get inherited so here we go
+	inline zylPel(uint32_t colorcode) 									__attribute__((always_inline))
+		: CRGB(colorcode)	{a = 255;}
+	inline zylPel(const CRGB& rhs) 										__attribute__((always_inline))
+		: CRGB(rhs)			{a = 255;}
+	inline zylPel(uint8_t ir, uint8_t ig, uint8_t ib, uint8_t ia = 255) __attribute__((always_inline))
+		: CRGB(ir, ig, ib)	{a = ia;}
+	inline zylPel(zylPel& rhs) 											__attribute__((always_inline)) 
+		= default;
+	inline zylPel()														__attribute__((always_inline))
+		: CRGB()			{a = 255;}
 };
 
 class zylFB {
@@ -80,12 +77,6 @@ public:
 	void				operator=(CRGB c);
 	;					zylFB(CRGB c);
 	;					zylFB();
-
-	void				test(){
-		xy(0, 0) = CRGB::Red;
-		xy(0, 0).addToRGB(5);
-	}
-
 };
 
 #endif

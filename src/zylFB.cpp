@@ -40,7 +40,7 @@ zylFB::zylFB(CRGB c){
 }
 
 zylFB::zylFB(){
-	setAll((uint32_t)CRGB::Black);
+	setAll(CRGB::Black);
 	setAlpha(255);
 }
 
