@@ -69,7 +69,7 @@ public:
 	void input(uint8_t x, uint8_t y, uint8_t z){
 		switch(x){
 		case 0:
-			speed = y; //TODO wertebereich von 1 bis 10 oder so, mehr ist augenkrebs alter
+			speed = y/16; //TODO wertebereich von 1 bis 10 oder so, mehr ist augenkrebs alter
 			break;
 		case 4:
 			scale = y;
