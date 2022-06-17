@@ -28,8 +28,8 @@
 #endif
 
 enum zylWifiMode{
-	ZWM_HOST 	= 0,
-	ZWM_CLIENT 	= 1
+	ZWM_HOST 	= 1,
+	ZWM_CLIENT 	= 0
 };
 
 class zylWifi{

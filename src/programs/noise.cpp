@@ -10,7 +10,9 @@
 static class : public zylProg{
 private:
 	int scale = 10;			//todo: find good defaults
-	int speed = 1;
+	int basespeed = 1;
+	int speedfactor = 1;
+	int speed = 5;
 	int threshhold = 1;
 	int numcolors = 6;
 
@@ -39,7 +41,7 @@ public:
 	void render(){
 		for (int x = 0; x < X_RES; x++){
 			for (int y = 0; y < Y_RES; y++){
-				int noise = inoise8(x*(scale+20)/5,y*(scale+20)/5,millis()*(speed+1)/20); //todo: get sliders and time factor
+				int noise = inoise8(x*(scale+20)/5,y*(scale+20)/5,millis()*speed); //todo: get sliders and time factor
 				//Serial.print(noise);
 				int prestep = 0;
 				if (false){	//todo: hue mode here
@@ -54,7 +56,7 @@ public:
 							}else{
 								m_FB[x][y].nscale8(map(noise,prestep,step,255,50));
 							}
-							Serial.print(numcolors);
+							//Serial.print(numcolors);
 							break;
 						} else{
 							prestep = step;
@@ -64,19 +66,22 @@ public:
 				}
 			}
 		}
+		m_FB[0][0] = CRGB::White;
+		m_FB[numcolors][1] = CRGB::White;
 	}
 
 	void input(uint8_t x, uint8_t y, uint8_t z){
 		switch(x){
 		case 0:
-			speed = y;
+			speed = basespeed + y*speedfactor;
+			//speed = y;
 			break;
 		case 4:
 			scale = y;
 			break;
 		case 129:
-			numcolors = y;
+			numcolors = y + 1;
 			break;
 		}
 	}
-} noise;
+} noise(false);

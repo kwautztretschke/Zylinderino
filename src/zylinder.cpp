@@ -85,7 +85,7 @@ void setup(){
 void loop(){
 	(void) s_Wifi.handle();
 	if (g_vMissedFrames){
-		Serial.printf("MISSED %d FRAMES, SOMETHING IS WRONG\n", g_vMissedFrames);
+		//Serial.printf("MISSED %d FRAMES, SOMETHING IS WRONG\n", g_vMissedFrames);
 		portENTER_CRITICAL(&g_TimerMux);
 		g_vMissedFrames = 0;
 		portEXIT_CRITICAL(&g_TimerMux);
