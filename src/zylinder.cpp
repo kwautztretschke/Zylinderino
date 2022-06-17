@@ -69,7 +69,6 @@ void setup(){
 	DPRINT("HW done, init timer\n");
 	initTimer();
 	DPRINT("timer done, init Wifi\n");
-	Serial.printf("Dipswitch state = %d\n", s_HW.getDipSwitch(0));
 	s_Wifi.init((zylWifiMode)s_HW.getDipSwitch(0));
 	DPRINT("Wifi done, init UDP\n");
 	s_Udp.init(PUP_PORT);
@@ -113,8 +112,15 @@ void loop(){
 			zylProgManager::setColor(CRGB(x, y, z));
 			break;
 		case OP_CHANGEPROGRAM:
-			zylProgManager::focus(x);
-			zylProgManager::printComposition();
+			if(zylProgManager::focus(x)){
+				Serial.printf("No program with ID %d found", x);
+				break;
+			}
+			if (s_HW.getDipSwitch(1)){
+				Serial.printf("Compositor disabled, displaying only program %d", x);
+				zylProgManager::changeComposition(3, 0);
+			}else
+				zylProgManager::printComposition();
 			break;
 		case OP_COMPOSITEPROGRAM:
 			Serial.printf("Compositor exit code %d\n", zylProgManager::changeComposition(x, y));

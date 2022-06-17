@@ -9,7 +9,7 @@
 
 static class : public zylProg{
 private:
-	int scale = 10;			//todo: find good defaults
+	int scale = 128;			//todo: find good defaults
 	int speed = 4;
 	int threshhold = 1;
 	int numcolors = 2;

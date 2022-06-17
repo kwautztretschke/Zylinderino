@@ -132,7 +132,7 @@ int zylProgManager::initPrograms()
 
 int zylProgManager::init()
 {	//initialize the zylProgManager (Set variables and add one program to renderqueue)
-	s_aColors[0] = 		CRGB::Green;
+	s_aColors[0] = 		CRGB::Yellow;
 	s_FG.m_pAbove = 	&s_FG;
 	s_FG.m_pBelow = 	&s_BG;
 	s_BG.m_pAbove = 	&s_FG;
