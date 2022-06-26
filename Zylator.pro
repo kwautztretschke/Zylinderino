@@ -10,16 +10,15 @@ CONFIG += c++17
 
 SOURCES += \
     src/qt/* \
-    src/zylProg.cpp \
-	src/zylFB.cpp \
+	src/shared/* \
     src/programs/*
 
 HEADERS += \
     include/qt/* \
-	include/zylProg.h \
-	include/zylFB.h
+	include/shared/* \
+	include/programs/*
 
-INCLUDEPATH += include/*
+INCLUDEPATH += include
 
 OBJECTS_DIR = build
 
