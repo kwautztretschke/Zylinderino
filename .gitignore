@@ -5,3 +5,8 @@ workspace.code-workspace
 .qtc_clangd/
 build/
 zylinder.code-workspace
+Makefile
+moc_predefs.h
+moc_mainwindow.cpp
+Zylator
+.qmake.stash
