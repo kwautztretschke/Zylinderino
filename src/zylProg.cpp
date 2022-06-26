@@ -82,9 +82,9 @@ int zylProg::move(bool up)
 
 //************************* Program Manager **********************
 int 		zylProgManager::s_Count =				0;
-zylProg*	zylProgManager::s_pHead = 				NULL;
-zylProg*	zylProgManager::s_pActive =				NULL;
-CRGB 		zylProgManager::s_aColors[MAX_COLORS] = {CRGB::Black};
+zylProg*	zylProgManager::s_pHead = 				nullptr;
+zylProg*	zylProgManager::s_pActive =				nullptr;
+zylPel 		zylProgManager::s_aColors[MAX_COLORS];
 int 		zylProgManager::s_ActiveColorIndex = 	0;
 zylProg		zylProgManager::s_FG(false);
 zylProg		zylProgManager::s_BG(false);
@@ -100,9 +100,9 @@ void zylProgManager::add(zylProg* ptr)
 int zylProgManager::focus(int id)
 {	//change active program by ID
 	zylProg* ptr = s_pHead;
-	while(ptr != NULL){
+	while(ptr != nullptr){
 		if(ptr->m_Id==id){
-			Serial.printf("Found program with ID %d\n", id);
+			DPRINT("Found program with ID %d\n", id);
 			s_pActive = ptr;
 			s_pActive->activate();
 			return 0;
@@ -119,12 +119,12 @@ void zylProgManager::input(uint8_t x, uint8_t y, uint8_t z)
 
 int zylProgManager::initPrograms()
 {	//initialize all programs
-	Serial.printf("initializing %d programs\n", s_Count);
+	DPRINT("initializing %d programs\n", s_Count);
 	int error=0;
 	zylProg* ptr = s_pHead;
 	for(int i=0; i<s_Count; i++){
 		error += ptr->init();
-		Serial.printf("Program with ID %d at %p\n", ptr->m_Id, ptr);
+		DPRINT("Program with ID %d at %p\n", ptr->m_Id, ptr);
 		ptr = ptr->m_pNext;
 	}
 	return error;
@@ -132,13 +132,15 @@ int zylProgManager::initPrograms()
 
 int zylProgManager::init()
 {	//initialize the zylProgManager (Set variables and add one program to renderqueue)
-	s_aColors[0] = 		CRGB::Green;
+	for (int i = 0; i < MAX_COLORS; i++)
+		s_aColors[i] = 	zylPel(255, 0, 0, 0);
+	s_aColors[0] = 		zylPel(255, 0, 255, 0);
 	s_FG.m_pAbove = 	&s_FG;
 	s_FG.m_pBelow = 	&s_BG;
 	s_BG.m_pAbove = 	&s_FG;
 	s_BG.m_pBelow = 	&s_BG;
-	if(s_pHead == NULL){
-		Serial.println("NULL POINTER ERROR, no programs loaded\n");
+	if(!s_pHead){
+		DPRINT("NULL POINTER ERROR, no programs loaded\n");
 		return 1;
 	}
 	s_pActive = s_pHead;	//focus first program and push it on the render list
@@ -227,16 +229,16 @@ int zylProgManager::changeComposition(int x, int y)
 
 void zylProgManager::printComposition()
 {	//print info about the renderqueue on serial
-	Serial.printf("\nComposition:\n");
+	DPRINT("\nComposition:\n");
 	zylProg* ptr = &s_FG;
 	for(int i=0;;i++){
 		if(ptr == &s_FG){
-			Serial.printf("Layer %d: Foreground\n", i);
+			DPRINT("Layer %d: Foreground\n", i);
 		}else if(ptr == &s_BG){
-			Serial.printf("Layer %d: Background\n", i);
+			DPRINT("Layer %d: Background\n", i);
 			break;
 		}else{
-			Serial.printf("Layer %d: Program %d, mode %d %s\n", i, ptr->m_Id, ptr->m_CompositeMode, (ptr==s_pActive)?"<-Active":"");
+			DPRINT("Layer %d: Program %d, mode %d %s\n", i, ptr->m_Id, ptr->m_CompositeMode, (ptr==s_pActive)?"<-Active":"");
 		}
 		ptr = ptr->m_pBelow;
 	}
@@ -247,7 +249,7 @@ void zylProgManager::selectColor(int i)
 	s_ActiveColorIndex = i;
 }
 
-void zylProgManager::setColor(CRGB c, int i)
+void zylProgManager::setColor(zylPel c, int i)
 {	//changes a specific color and leaves index on it
 	if(i>=0 && i<MAX_COLORS){
 		s_ActiveColorIndex = i;
@@ -255,17 +257,17 @@ void zylProgManager::setColor(CRGB c, int i)
  	}
 }
  
-void zylProgManager::setColor(CRGB c)
+void zylProgManager::setColor(zylPel c)
 {	//changes the currently active color
 	s_aColors[s_ActiveColorIndex] = c;
 }
 
-CRGB zylProgManager::getColor(int i)
+zylPel zylProgManager::getColor(int i)
 {	//returns a specific color without activating it
 	return s_aColors[i];
 }
 
-CRGB zylProgManager::getColor()
+zylPel zylProgManager::getColor()
 {	//returns the currently selected color
 	return s_aColors[s_ActiveColorIndex];
 }

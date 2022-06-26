@@ -16,7 +16,7 @@
 int zylWifi::init(zylWifiMode mode){
 	m_Mode = mode;
 	if (m_Mode == ZWM_CLIENT){
-		Serial.printf("Starting Wifi in client mode\n");
+		DPRINT("Starting Wifi in client mode\n");
 		m_WAS.add(STASSID, STAPSWD);
 		m_WAS.add(RESCUE_SSID, RESCUE_PSWD);
 		while(m_WAS.scanAndConnect() < 0);//this has to succeed, otherwise we crash.
@@ -26,7 +26,7 @@ int zylWifi::init(zylWifiMode mode){
 		Serial.print(" with IP ");
 		Serial.println(WiFi.localIP());
 	}else if (m_Mode == ZWM_HOST){
-		Serial.printf("Starting Wifi in host mode\n");
+		DPRINT("Starting Wifi in host mode\n");
 		IPAddress IP(192,168,4,1);
 		IPAddress gateway(192,168,4,9);
 		IPAddress subnet(255,255,255,0);
@@ -65,7 +65,7 @@ int zylWifi::handle(){									//periodically check the wifi connection
 //*************************** UDP ********************************************
 
 int zylUdp::init(int port){
-	Serial.printf("Listening on Port %d\n", port);
+	DPRINT("Listening on Port %d\n", port);
 	return m_Udp.begin(port);
 }
 
@@ -117,10 +117,10 @@ int initOTA(){
 		static bool state = false;
 		//digitalWrite(BOARD_LED,state);
 		state ^= true;
-		Serial.printf("OTA: Progress: %u%%\r", (progress / (total / 100)));
+		DPRINT("OTA: Progress: %u%%\r", (progress / (total / 100)));
 	});
 	ArduinoOTA.onError([](ota_error_t error) {
-		Serial.printf("Error[%u]: ", error);
+		DPRINT("Error[%u]: ", error);
 		if 		(error == OTA_AUTH_ERROR)      	{Serial.println("Auth failed");		return 1;}
 		else if (error == OTA_BEGIN_ERROR)  	{Serial.println("Begin failed");	return 2;}
 		else if (error == OTA_CONNECT_ERROR)	{Serial.println("Connect failed");	return 3;}

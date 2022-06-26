@@ -51,7 +51,7 @@ private:
 	static int					s_Count;
 	static zylProg*				s_pHead;
 	static zylProg*				s_pActive;
-	static CRGB					s_aColors[MAX_COLORS];
+	static zylPel				s_aColors[MAX_COLORS];
 	static int					s_ActiveColorIndex;
 public:
 	//* Head and Tail for doubly linked render-list
@@ -69,10 +69,10 @@ public:
 	static int					changeComposition(int x, int y);
 	static void					printComposition();
 	static void					selectColor(int i);
-	static void					setColor(CRGB c, int i);
-	static void					setColor(CRGB c);
-	static CRGB					getColor(int i);
-	static CRGB					getColor();
+	static void					setColor(zylPel c, int i);
+	static void					setColor(zylPel c);
+	static zylPel				getColor(int i);
+	static zylPel				getColor();
 };
 
 #endif

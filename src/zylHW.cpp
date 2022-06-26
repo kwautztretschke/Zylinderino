@@ -38,7 +38,8 @@ void zylHW_Bernie::show(zylFB fb){
 	// map coordinates
 	for(int y=0; y<8&&y<Y_RES; y++){
 		for (int x=0; x<m_aRes[y]&&x<X_RES; x++){
-			m_aLeds[m_aOff[y] + x] = fb(x, 7-y); 		//flip y values because of OpenGL indexing
+			zylPel p = fb(x, 7-y);
+			m_aLeds[m_aOff[y] + x] = CRGB(p.r, p.g, p.b); 		//flip y values because of OpenGL indexing
 		}
 	}
 	FastLED.show();

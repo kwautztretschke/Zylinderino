@@ -22,11 +22,6 @@
 #include "zylProg.h"
 #include "opcodes.h"
 
-#if 1
-	#define DPRINT Serial.printf
-#else
-	#define DPRINT //
-#endif
 
 //*************************** Static Variables **************************
 static HARDWAREBACKEND 	s_HW;
@@ -84,7 +79,7 @@ void setup(){
 void loop(){
 	(void) s_Wifi.handle();
 	if (g_vMissedFrames){
-		Serial.printf("MISSED %d FRAMES, SOMETHING IS WRONG\n", g_vMissedFrames);
+		DPRINT("MISSED %d FRAMES, SOMETHING IS WRONG\n", g_vMissedFrames);
 		portENTER_CRITICAL(&g_TimerMux);
 		g_vMissedFrames = 0;
 		portEXIT_CRITICAL(&g_TimerMux);
@@ -100,7 +95,7 @@ void loop(){
 
 	uint8_t opcode, x, y, z;
 	if(s_Udp.read(&opcode, &x, &y, &z)){
-		Serial.printf("\nreceived %X, %X, %X, %X\n", opcode, x, y, z);
+		DPRINT("\nreceived %X, %X, %X, %X\n", opcode, x, y, z);
 		switch(opcode){
 		case OP_REBOOT:
 			resetFunc();
@@ -109,7 +104,7 @@ void loop(){
 			zylProgManager::selectColor(x);
 			break;
 		case OP_CHANGECOLORRGB:
-			zylProgManager::setColor(CRGB(x, y, z));
+			zylProgManager::setColor(zylPel(255, x, y, z));
 			break;
 		case OP_CHANGEPROGRAM:
 			if(zylProgManager::focus(x))

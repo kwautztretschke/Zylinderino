@@ -12,6 +12,7 @@ SOURCES += \
     mainwindow.cpp \
     zylator.cpp \
     src/zylProg.cpp \
+	src/zylFB.cpp \
     src/programs/*
 
 HEADERS += \

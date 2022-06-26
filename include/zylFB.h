@@ -12,13 +12,13 @@
 #ifndef __ZYLFB_H_
 #define __ZYLFB_H_
 
-#include <FastLED.h>
 #include "config.h"
 
 
-//*************** Zylinder Pixel, inherited from FastLED *************************
-//				  (Syntax is also inherited, hence the inline functions)
-struct zylPel : CRGB {
+//*************** Zylinder Pixel, mostly stolen from FastLED *************************
+struct zylPel {
+public:
+	// color bytes unionized to be accessible via array or member syntax
     union {
 		struct {
             union {
@@ -44,26 +44,20 @@ struct zylPel : CRGB {
         };
 		uint8_t raw[4];
 	};
-	inline zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) __attribute__((always_inline)){
-		a = na; r = nr; g = ng; b = nb;
-        return *this;
-    }
-	inline zylPel& setAlpha (uint8_t na) __attribute__((always_inline)){
-		a = na;
-		return *this;
-	}
+	//****** constructors  *********************************************************
+	zylPel() = default;
+	zylPel(const zylPel& rhs) = default;
+	zylPel(uint8_t ir, uint8_t ig, uint8_t ib) : a(255), r(ir), g(ig), b(ib) {}
+	zylPel(uint8_t ia, uint8_t ir, uint8_t ig, uint8_t ib) : a(ia), r(ir), g(ig), b(ib) {}
 
-	//? constructors dont get inherited so here we go
-	inline zylPel(uint32_t colorcode) 									__attribute__((always_inline))
-		: CRGB(colorcode)	{a = 255;}
-	inline zylPel(const CRGB& rhs) 										__attribute__((always_inline))
-		: CRGB(rhs)			{a = 255;}
-	inline zylPel(uint8_t ir, uint8_t ig, uint8_t ib, uint8_t ia = 255) __attribute__((always_inline))
-		: CRGB(ir, ig, ib)	{a = ia;}
-	inline zylPel(zylPel& rhs) 											__attribute__((always_inline)) 
-		= default;
-	inline zylPel()														__attribute__((always_inline))
-		: CRGB()			{a = 255;}
+	//***** operators *************************************************************
+	zylPel& operator= (const zylPel& rhs) = default;
+
+
+
+	zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) {
+		a = na; r = nr; g = ng; b = nb;}
+	zylPel& setAlpha (uint8_t na) {a = na;}
 };
 
 class zylFB {
@@ -71,11 +65,11 @@ private:
 	zylPel				m_FB[X_RES][Y_RES];
 public:
 	zylPel&				xy(int x, int y);
-	void				setAll(CRGB c);
+	void				setAll(zylPel c);
 	void				setAlpha(uint8_t na);
 	zylPel&				operator()(int x, int y);
-	void				operator=(CRGB c);
-	;					zylFB(CRGB c);
+	void				operator=(zylPel c);
+	;					zylFB(zylPel c);
 	;					zylFB();
 };
 

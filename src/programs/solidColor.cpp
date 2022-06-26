@@ -30,6 +30,7 @@ public:
 	void render(){
 		for(int x=0; x<X_RES; x++)
 			for(int y=0; y<Y_RES; y++)
-				m_FB[x][y] = zylProgManager::getColor(m_ColorIndex);
+				//m_FB[x][y].setHue((millis()/10)%255);
+				m_FB(x, y) = zylProgManager::getColor(m_ColorIndex);
 	}
 } solidColor;

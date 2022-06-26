@@ -14,6 +14,21 @@
 
 #include "wificredentials.h"
 
+#define DEBUG
+#undef ARDUINO
+
+#ifdef DEBUG
+	#ifndef ARDUINO
+		#include <stdio.h>
+		#include <stdint.h>
+  		#define DPRINT printf
+	#else
+		#define DPRINT Serial.printf
+	#endif
+#else
+	#define DPRINT //
+#endif
+
 #define PUP_PORT 				26091				//UDP port for receiving PUP commands
 #define TEXT_PORT 				26092				//UDP port for receiving plaintext
 #define AP_NAME 				"Zylinder"			//SoftAP SSID name
