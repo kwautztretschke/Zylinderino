@@ -29,7 +29,7 @@ private:
 public:
 	using zylProg::zylProg;
 	int init(){
-		m_Id = 132;
+		m_Id = 131;
 		return 0;
 	}
 	void render(){
@@ -70,4 +70,4 @@ public:
 		}
 		
 	}
-} police(false);
+} police;

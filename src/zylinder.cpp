@@ -29,7 +29,7 @@
 #endif
 
 //*************************** Static Variables **************************
-static HARDWAREBACKEND 	s_HW;
+static HARDWAREBACKEND 	s_HW;		// Idea: instanciate backends in their respective files (just like zylProgs), and have this be a pointer to it (or declare extern?)
 static zylWifi			s_Wifi;
 static zylUdp			s_Udp;
 static CRGB				s_FB[X_RES][Y_RES];

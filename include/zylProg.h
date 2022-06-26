@@ -22,7 +22,7 @@ typedef char CRGB;
 #include "config.h"
 
 //************************* Zylinder Program ************************
-enum zylCompositeMode{
+enum zylCompositeMode{ //maybe the artificial namespacing is unneccessary
 	ZCM_SOLID 	= 0,
 	ZCM_ADD 	= 1,
 	ZCM_SUB 	= 2,
@@ -55,7 +55,7 @@ public:
 class zylProgManager{
 private:
 	static int					s_Count;
-	static zylProg*				s_pHead;
+	static zylProg*				s_pHead; // maybe instead of a linked list, we could use a pointer array? 
 	static zylProg*				s_pActive;
 	static CRGB					s_aColors[MAX_COLORS];
 	static int					s_ActiveColorIndex;
