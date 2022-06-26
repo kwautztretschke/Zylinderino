@@ -2,4 +2,6 @@ wificredentials.h
 .pio
 .vscode
 workspace.code-workspace
+.qtc_clangd/
+build/
 zylinder.code-workspace
