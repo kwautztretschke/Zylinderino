@@ -9,7 +9,7 @@
  * 
  */
 
-#include "zylFB.h"
+#include "shared/zylFB.h"
 
 
 zylPel&	zylFB::xy(int x, int y){

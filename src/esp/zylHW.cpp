@@ -9,7 +9,7 @@
  * 
  */
 
-#include "zylHW.h"
+#include "esp/zylHW.h"
 
 
 const int zylHW_Bernie::m_aRes[8] = {32, 33, 33, 34, 34, 34, 35, 35};		// Number of LEDs in each row 

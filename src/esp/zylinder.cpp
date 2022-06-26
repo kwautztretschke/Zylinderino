@@ -16,11 +16,11 @@
 //#include <ArduinoOTA.h>
 //#include "WiFiAutoSelector.h"
 
-#include "config.h"
-#include "zylHW.h"
-#include "zylWifi.h"
-#include "zylProg.h"
-#include "opcodes.h"
+#include "shared/config.h"
+#include "shared/zylProg.h"
+#include "shared/opcodes.h"
+#include "esp/zylHW.h"
+#include "esp/zylWifi.h"
 
 
 //*************************** Static Variables **************************

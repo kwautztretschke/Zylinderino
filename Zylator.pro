@@ -20,7 +20,7 @@ HEADERS += \
 
 INCLUDEPATH += include
 
-OBJECTS_DIR = build
+OBJECTS_DIR = .qt/build
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -9,7 +9,7 @@
  * 
  */
 
-#include "zylProg.h"
+#include "shared/zylProg.h"
 
 //***************** ZylProg base class functions *******************
 zylProg::zylProg()
