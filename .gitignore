@@ -6,7 +6,6 @@ workspace.code-workspace
 build/
 zylinder.code-workspace
 Makefile
-moc_predefs.h
-moc_mainwindow.cpp
 Zylator
 .qmake.stash
+moc_*
