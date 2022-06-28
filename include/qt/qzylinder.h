@@ -6,6 +6,7 @@
 #include <QImage>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
+#include <QColor>
 
 #include "shared/config.h"
 #include "shared/zylFB.h"

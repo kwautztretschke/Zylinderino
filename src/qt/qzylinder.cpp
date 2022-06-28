@@ -39,24 +39,22 @@ void QZylinder::programInput(uint8_t x, uint8_t y, uint8_t z){
 }
 
 void QZylinder::render(){
-	DPRINT("render huiii");
-	zylProgManager::render(m_Fb);
+	zylProgManager::render(&m_Fb);
 
 	// convert zylFB to QImage
-	QRgb c;
-	zylPel *p;
+	QColor c;
+	zylPel p;
 	for (int x = 0; x < X_RES; x++){
 		for (int y = 0; y < Y_RES; y++){
-			p = &(m_Fb.xy(x, y));
-			c = qRgb(p->r, p->g, p->b);
-			m_pI->setPixel(x, y, c);
-			if(!x&&!y)
-				qDebug() << "Pixel" << c;
+			p = m_Fb(x, y);
+			c.setRgb(p.r, p.g, p.b);
+			m_pI->setPixelColor(x, y, c);
 		}
 	}
+	// convert QImage to QPixmap to QGraphicsPixmapItem (wtf)
 	m_GPI.setPixmap(QPixmap::fromImage(
 		m_pI->scaled(ZOOMFACTOR*X_RES, ZOOMFACTOR*Y_RES)
 		));
 
-	emit imageChanged();
+	// emit imageChanged(); //*somehow this is done automatically?
 }
