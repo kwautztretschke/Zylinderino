@@ -19,9 +19,9 @@
 
 #ifdef DEBUG
 	#ifndef ARDUINO
-		#include <stdio.h>
 		#include <stdint.h>
-  		#define DPRINT printf
+		#include <QDebug>
+  		#define DPRINT qDebug
 	#else
 		#define DPRINT Serial.printf
 	#endif

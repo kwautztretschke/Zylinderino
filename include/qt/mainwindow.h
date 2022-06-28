@@ -1,9 +1,7 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef __MAINWINDOW_H_
+#define __MAINWINDOW_H_
 
-#include <QtCore/QVariant> // braucht man das?
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QApplication> // und das?
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QGraphicsView>
