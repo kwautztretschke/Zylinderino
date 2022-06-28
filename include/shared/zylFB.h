@@ -56,8 +56,8 @@ public:
 
 
 	zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb) {
-		a = na; r = nr; g = ng; b = nb;}
-	zylPel& setAlpha (uint8_t na) {a = na;}
+		a = na; r = nr; g = ng; b = nb; return *this;}
+	zylPel& setAlpha (uint8_t na) {a = na; return *this;}
 };
 
 class zylFB {

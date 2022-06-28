@@ -25,8 +25,7 @@ void QZylinder::input(uint8_t op, uint8_t x, uint8_t y, uint8_t z){
 }
 
 void QZylinder::programInput(uint8_t x, uint8_t y, uint8_t z){
-	// give input to ZPM
-	DPRINT("programInput slot");
+	zylProgManager::input(x, y, z);
 }
 
 void QZylinder::render(){

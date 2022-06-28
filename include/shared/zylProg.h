@@ -41,7 +41,7 @@ public:
 	virtual int 			init(){return 0;}
 	virtual void          	activate(){};
 	virtual void          	render(){};
-	virtual void			input(uint8_t x, uint8_t y, uint8_t z){};
+	virtual void			input(uint8_t, uint8_t, uint8_t){};
 };
 
 //************************* Program Manager *************************
