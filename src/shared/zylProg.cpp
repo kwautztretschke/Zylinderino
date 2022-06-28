@@ -152,11 +152,11 @@ int zylProgManager::init()
 	return 0;
 }
 
-void zylProgManager::renderPrograms()
+void zylProgManager::renderPrograms(long ms)
 {	//render all programs in renderqueue
 	zylProg* ptr = s_BG.m_pAbove;
 	while(ptr != &s_FG){
-		ptr->render();
+		ptr->render(ms);
 		ptr = ptr->m_pAbove;
 	}
 }

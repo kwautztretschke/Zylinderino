@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QImage>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -15,8 +16,9 @@
 class QZylinder : public QObject{
 	Q_OBJECT
 
-	zylFB					m_Fb;
-	QTimer*					m_pT;
+	zylFB					m_FB;
+	QTimer*					m_pInterruptTimer;
+	QElapsedTimer*			m_pElapsedTimer;
 	QImage*	 				m_pI;    //TODO clean up pointer vs variables
 	QGraphicsScene 			m_Scene;
 	QGraphicsPixmapItem 	m_GPI;

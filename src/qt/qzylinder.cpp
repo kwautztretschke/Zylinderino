@@ -5,9 +5,12 @@
 
 QZylinder::QZylinder(QObject *parent) : QObject(parent) {
 	// start timer to continuously render
-	m_pT = new QTimer(parent);
-	connect(m_pT, SIGNAL(timeout()), this, SLOT(render()));
-	m_pT->start(1000); //TODO use a proper framerate
+	m_pInterruptTimer = new QTimer(parent);
+	connect(m_pInterruptTimer, SIGNAL(timeout()), this, SLOT(render()));
+	m_pInterruptTimer->start(1/TARGET_FRAME_RATE);
+	// and one to have a timed index (in ms)
+	m_pElapsedTimer = new QElapsedTimer();
+	m_pElapsedTimer->start();
 
 	// initialize Image Stuff
 	m_pI = new QImage(X_RES, Y_RES, QImage::Format_RGB888);
@@ -39,14 +42,14 @@ void QZylinder::programInput(uint8_t x, uint8_t y, uint8_t z){
 }
 
 void QZylinder::render(){
-	zylProgManager::render(&m_Fb);
+	zylProgManager::render(&m_FB, m_pElapsedTimer->elapsed());
 
 	// convert zylFB to QImage
 	QColor c;
 	zylPel p;
 	for (int x = 0; x < X_RES; x++){
 		for (int y = 0; y < Y_RES; y++){
-			p = m_Fb(x, y);
+			p = m_FB(x, y);
 			c.setRgb(p.r, p.g, p.b);
 			m_pI->setPixelColor(x, y, c);
 		}

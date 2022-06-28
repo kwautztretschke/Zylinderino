@@ -40,7 +40,7 @@ public:
 	//* methods to be redefined by programs -> "interface"
 	virtual int 			init(){return 0;}
 	virtual void          	activate(){};
-	virtual void          	render(){};
+	virtual void          	render(long ms){};
 	virtual void			input(uint8_t, uint8_t, uint8_t){};
 };
 
@@ -62,7 +62,7 @@ public:
 	static int					init();
 
 	static int					focus(int id);
-	static void					renderPrograms();
+	static void					renderPrograms(long ms);
 	static void					composite(zylFB fb);
 	static void					input(uint8_t x, uint8_t y, uint8_t z);
 
