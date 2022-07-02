@@ -26,7 +26,7 @@ int zylWifi::init(zylWifiMode mode){
 		Serial.print(" with IP ");
 		Serial.println(WiFi.localIP());
 	}else if (m_Mode == ZWM_HOST){
-		Serial.printf("Starting Wifi in host mode\n")
+		Serial.printf("Starting Wifi in host mode\n");
 		IPAddress IP(192,168,4,1);
 		IPAddress gateway(192,168,4,9);
 		IPAddress subnet(255,255,255,0);
