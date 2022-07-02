@@ -37,6 +37,7 @@ int zylProg::push()
 	}
 }
 
+//TODO make it impossible to pop FG and BG
 int zylProg::pop()
 {	//removes program from render queue, if it's in there
 	if(m_pAbove || m_pBelow){
@@ -141,6 +142,9 @@ int zylProgManager::init()
 		return 1;
 	}
 	s_pActive = s_pHead;	//focus first program and push it on the render list
+	#ifdef ZPM_DEFAULT_PROGRAM
+		focus(ZPM_DEFAULT_PROGRAM);
+	#endif
 	s_pActive->push();
 	s_pActive->activate();
 	return 0;
@@ -212,6 +216,10 @@ int zylProgManager::changeComposition(int x, int y)
 		break;
 	case 2: //change opacity
 		return 0; //TODO implement
+	case 3: //show only a single program
+		for (zylProg* ptr = s_BG.m_pAbove; ptr != &s_FG; ptr = s_BG.m_pAbove)
+			ptr->pop();
+		return s_pActive->push();
 	default: //invalid input
 		return 3;
 	}

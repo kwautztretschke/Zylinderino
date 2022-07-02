@@ -22,6 +22,8 @@
 #define RESCUE_PSWD				"rescue"
 #define MAX_COLORS				8					//available colors, if too low might cause crashes
 
+#define ZPM_DEFAULT_PROGRAM 	1					//focuses this program after initing. uncomment this for default
+
 #ifdef Z_LEO
   #define X_RES 				48                  //Resolution in x direction
   #define Y_RES 				7                   //Resolution in y direction
