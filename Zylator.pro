@@ -11,12 +11,16 @@ CONFIG += c++17
 SOURCES += \
     src/qt/* \
 	src/shared/* \
-    src/programs/*
+#   src/programs/*
 
 HEADERS += \
     include/qt/* \
-	include/shared/* \
+	include/shared/* 
 	include/programs/*
+
+# adding programs manually, until fastled compability issues are solved
+SOURCES += \
+	src/programs/sampleProgram.cpp
 
 INCLUDEPATH += include
 

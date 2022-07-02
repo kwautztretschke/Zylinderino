@@ -42,7 +42,8 @@ void QZylinder::programInput(uint8_t x, uint8_t y, uint8_t z){
 }
 
 void QZylinder::render(){
-	zylProgManager::render(&m_FB, m_pElapsedTimer->elapsed());
+	zylProgManager::renderPrograms(m_pElapsedTimer->elapsed());
+	zylProgManager::composite(&m_FB);
 
 	// convert zylFB to QImage
 	QColor c;

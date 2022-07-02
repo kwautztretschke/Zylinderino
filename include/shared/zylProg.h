@@ -63,7 +63,7 @@ public:
 
 	static int					focus(int id);
 	static void					renderPrograms(long ms);
-	static void					composite(zylFB fb);
+	static void					composite(zylFB *fb);
 	static void					input(uint8_t x, uint8_t y, uint8_t z);
 
 	static int					changeComposition(int x, int y);
