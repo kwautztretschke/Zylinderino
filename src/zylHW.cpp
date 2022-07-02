@@ -21,6 +21,8 @@ int zylHW_Bernie::init(){
 	pinMode(DIP2_PIN, INPUT);
 	pinMode(DIP3_PIN, INPUT);
 	pinMode(DIP4_PIN, INPUT);
+	Serial.printf("Dipswitches: %d, %d, %d, %d\n", getDipSwitch(0), getDipSwitch(1), getDipSwitch(2), getDipSwitch(3));
+;
 	//* initialize LEDs
 	FastLED.addLeds<WS2812B, DATA_PIN, GRB>(m_aLeds, NUM_LEDS);
 	FastLED.setMaxPowerInVoltsAndMilliamps(LED_VOLTAGE, LED_MAX_MILLIAMPS);
