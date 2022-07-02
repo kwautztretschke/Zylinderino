@@ -24,4 +24,4 @@ public:
 				//m_FB[x][y].setHue((millis()/10)%255);
 				m_FB[x][y] = zylProgManager::getColor(0);
 	}
-} sampleProgram;
+} sampleProgram(false);
