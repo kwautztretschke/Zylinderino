@@ -640,33 +640,4 @@ static unsigned char g_aFont[] = {
     BITS_TO_BYTE(0,1,0,1,0,1,0,1)
 };
 
-static unsigned char g_aZepelli[] = {
-	BITS_TO_BYTE(0,1,1,1,0,0,0,1),
-	BITS_TO_BYTE(1,1,1,1,1,0,1,1),
-	BITS_TO_BYTE(0,1,1,1,0,1,1,1),
-	BITS_TO_BYTE(0,0,1,0,0,0,1,1),
-	BITS_TO_BYTE(0,1,0,0,0,0,0,1),
-	BITS_TO_BYTE(1,1,1,0,0,0,1,0),
-	BITS_TO_BYTE(1,1,1,1,0,1,1,1),
-	BITS_TO_BYTE(1,1,1,0,1,1,1,1),
-	BITS_TO_BYTE(0,1,0,0,0,1,1,1),
-	BITS_TO_BYTE(1,0,0,0,0,0,1,0),
-	BITS_TO_BYTE(1,1,0,0,0,1,0,0),
-	BITS_TO_BYTE(1,1,1,0,1,1,1,0),
-	BITS_TO_BYTE(1,1,0,1,1,1,1,1),
-	BITS_TO_BYTE(1,0,0,0,1,1,1,0),
-	BITS_TO_BYTE(0,0,0,0,0,1,0,0),
-	BITS_TO_BYTE(1,0,0,0,1,0,0,0),
-	BITS_TO_BYTE(1,1,0,1,1,1,0,0),
-	BITS_TO_BYTE(1,0,1,1,1,1,1,0),
-	BITS_TO_BYTE(0,0,0,1,1,1,0,1),
-	BITS_TO_BYTE(0,0,0,0,1,0,0,0),
-	BITS_TO_BYTE(0,0,0,1,0,0,0,0),
-	BITS_TO_BYTE(1,0,1,1,1,0,0,0),
-	BITS_TO_BYTE(0,1,1,1,1,1,0,1),
-	BITS_TO_BYTE(0,0,1,1,1,0,1,1),
-	BITS_TO_BYTE(0,0,0,1,0,0,0,1),
-	BITS_TO_BYTE(0,0,1,0,0,0,0,0)
-};
-
 #endif /* __BUCHSTABENYOLO_H__ */
