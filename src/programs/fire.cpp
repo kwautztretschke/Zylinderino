@@ -24,7 +24,7 @@ private:
 		int t1 = 144 - y*256/(m_ThresholdSlope*Y_RES);
 		int t2 = 190 - y*256/(m_ThresholdSlope*Y_RES);
 		if (v<t0)
-			return CRGB::Purple;
+			return CRGB::White;
 		if (v<t1)
 			return CRGB::Orange;
 		if (v<t2)
@@ -35,7 +35,7 @@ public:
 	using zylProg::zylProg;
 	int init(){
 		m_Id = 130;
-		m_Speed = 16;
+		m_Speed = 19;
 		m_XScale = 64;
 		m_YScale = 2; // should be around XScale/16, maybe combine
 		m_ThresholdSlope = 2;
