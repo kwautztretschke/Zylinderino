@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     src/qt/* \
+	src/qt/lib8tion/* \
 	src/shared/* \
 #   src/programs/*
 
 HEADERS += \
     include/qt/* \
+	include/qt/lib8tion/* \
 	include/shared/* 
 	include/programs/*
 
