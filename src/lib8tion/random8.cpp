@@ -1,7 +1,4 @@
-#ifndef __INC_LIB8TION_RANDOM_H
-#define __INC_LIB8TION_RANDOM_H
-
-#include "qt/lib8tion/lib8tion.h"
+#include "lib8tion/random8.h"
 
 ///@ingroup lib8tion
 
@@ -11,14 +8,8 @@
 ///  also somewhat less random.  You can add entropy.
 ///@{
 
-// X(n+1) = (2053 * X(n)) + 13849)
-#define FASTLED_RAND16_2053  ((uint16_t)(2053))
-#define FASTLED_RAND16_13849 ((uint16_t)(13849))
-
-#define APPLY_FASTLED_RAND16_2053(x) (x * FASTLED_RAND16_2053)
 
 /// random number seed
-#define RAND16_SEED  1337
 uint16_t rand16seed = RAND16_SEED;
 
 /// Generate an 8-bit random number
@@ -94,7 +85,3 @@ void random16_add_entropy( uint16_t entropy)
 {
     rand16seed += entropy;
 }
-
-///@}
-
-#endif

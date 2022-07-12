@@ -1,7 +1,4 @@
-#ifndef __INC_LIB8TION_TRIG_H
-#define __INC_LIB8TION_TRIG_H
-
-#include "qt/lib8tion/lib8tion.h"
+#include "lib8tion/trig8.h"
 
 /// Fast 16-bit approximation of sin(x). This approximation never varies more than
 /// 0.69% from the floating point value you'd get by doing
@@ -116,6 +113,3 @@ uint8_t cos8( uint8_t theta)
 {
     return sin8( theta + 64);
 }
-
-///@}
-#endif
