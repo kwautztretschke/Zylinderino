@@ -1,7 +1,7 @@
-#ifndef __INC_NOISE_H
-#define __INC_NOISE_H
+#ifndef __INC_NOISE8_H
+#define __INC_NOISE8_H
 
-#include "qt/lib8tion/lib8tion.h"
+#include "lib8tion/lib8tion.h"
 
 uint16_t inoise16(uint32_t x, uint32_t y, uint32_t z);
 uint16_t inoise16(uint32_t x, uint32_t y);

@@ -1,7 +1,7 @@
 #ifndef __INC_EASE8_H
 #define __INC_EASE8_H
 
-#include "qt/lib8tion/lib8tion.h"
+#include "lib8tion/lib8tion.h"
 
 ///////////////////////////////////////////////////////////////////////
 //

@@ -10,15 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     src/qt/* \
-	src/qt/lib8tion/* \
+	src/lib8tion/* \
 	src/shared/* \
 #   src/programs/*
 
 HEADERS += \
     include/qt/* \
-	include/qt/lib8tion/* \
+	include/lib8tion/* \
 	include/shared/* 
-	include/programs/*
 
 # adding programs manually, until fastled compability issues are solved
 SOURCES += \

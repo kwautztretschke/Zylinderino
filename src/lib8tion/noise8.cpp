@@ -1,5 +1,8 @@
-#include "qt/noise.h"
-#include "qt/lib8tion/math8.h"
+#include "lib8tion/noise8.h"
+
+#include "lib8tion/math8.h"
+#include "lib8tion/scale8.h"
+#include "lib8tion/ease8.h"
 
 #include <string.h>
 

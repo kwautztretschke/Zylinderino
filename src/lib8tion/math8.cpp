@@ -1,5 +1,5 @@
-#include "qt/lib8tion/lib8tion.h"
-#include "qt/lib8tion/scale8.h"
+#include "lib8tion/lib8tion.h"
+#include "lib8tion/scale8.h"
 
 
 /// add one byte to another, saturating at 0xFF

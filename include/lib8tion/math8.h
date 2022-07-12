@@ -1,7 +1,7 @@
 #ifndef __INC_LIB8TION_MATH_H
 #define __INC_LIB8TION_MATH_H
 
-#include "qt/lib8tion/lib8tion.h"
+#include "lib8tion/lib8tion.h"
 
 
 /// add one byte to another, saturating at 0xFF
