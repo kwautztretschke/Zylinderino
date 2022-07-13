@@ -21,7 +21,6 @@ public:
 	void render(long ms){
 		for(int x=0; x<X_RES; x++)
 			for(int y=0; y<Y_RES; y++)
-				//m_FB[x][y].setHue((millis()/10)%255);
 				m_FB(x, y) = (ms/100 % 2) ? zylPel(255, 0, 0) : zylPel(0, 255, 0);
 	}
 } sampleProgram;

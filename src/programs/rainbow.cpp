@@ -9,7 +9,7 @@
  * 
  */
 
-#include "zylProg.h"
+#include "shared/zylProg.h"
 
 class : public zylProg{
 private:
@@ -23,11 +23,11 @@ public:
 		m_Id = 1;
 		return 0;
 	}
-	void render(){
-		int v = (millis()*m_Speed/1024);
+	void render(long ms){
+		int v = (ms*m_Speed/1024);
 		for (int x = 0; x < X_RES; x++){
 			for (int y = 0; y < Y_RES; y++){
-				m_FB[x][y].setHue(
+				m_FB(x,y).setHue(
 					(x*255)/X_RES
 					+y*m_Slant
 					+v    

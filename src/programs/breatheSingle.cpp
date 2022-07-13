@@ -9,7 +9,7 @@
  * 
  */
 
-#include "zylProg.h"
+#include "shared/zylProg.h"
 
 static class : public zylProg{
 public:
@@ -31,16 +31,16 @@ public:
 		m_Id = 2;
 		return 0;
 	}
-	void render(){
-		int v = (int)(((millis()*4*(m_Speed+32))/1024)&511)-256;
+	void render(long ms){
+		int v = (int)(((ms*4*(m_Speed+32))/1024)&511)-256;
 		if(v<0)
 			v = -v;
 		if(v>255)
 			v = 255;
 		for(int x=0; x<X_RES; x++){
 			for(int y=0; y<Y_RES; y++){
-				m_FB[x][y] = zylProgManager::getColor(m_ColorIndex);
-				m_FB[x][y].subtractFromRGB(v);
+				m_FB(x,y) = zylProgManager::getColor(m_ColorIndex);
+				m_FB(x,y).subtractFromRGB(v);
 			}
 		}
 	}
