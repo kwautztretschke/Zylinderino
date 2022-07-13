@@ -14,18 +14,25 @@
 
 #include "shared/config.h"
 #include "shared/zylPel.h"
+#include "lib8tion/lib8tion.h"
 
 class zylFB {
 private:
 	zylPel				m_FB[X_RES][Y_RES];
 public:
+	//****** constructors  *********************************************************
+	;					zylFB(zylPel c);
+	;					zylFB();
+
+	//***** operators *************************************************************
+	zylPel&				operator()(int x, int y);
+	void				operator=(zylPel c);
+
+	//***** methods ***************************************************************
 	zylPel&				xy(int x, int y);
 	void				setAll(zylPel c);
 	void				setAlpha(uint8_t na);
-	zylPel&				operator()(int x, int y);
-	void				operator=(zylPel c);
-	;					zylFB(zylPel c);
-	;					zylFB();
+	void				blur(fract8 blur_amount);
 };
 
 #endif

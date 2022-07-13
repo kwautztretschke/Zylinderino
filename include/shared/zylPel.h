@@ -18,6 +18,7 @@
 struct zylPel {
 public:
 	// color bytes unionized to be accessible via array or member syntax
+			//? why tho, is this ever used? all it does is throw warnings
     union {
 		struct {
             union {
@@ -50,10 +51,18 @@ public:
 	zylPel(uint8_t ia, uint8_t ir, uint8_t ig, uint8_t ib) : a(ia), r(ir), g(ig), b(ib) {}
 
 	//***** operators *************************************************************
-	zylPel& operator= (const zylPel& rhs) = default;
+	zylPel& operator=  (const zylPel& rhs) = default;
+	zylPel& operator+= (const zylPel& rhs);
 
-	zylPel& setARGB (uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb); 
-	zylPel& setAlpha (uint8_t na);
+	//***** methods (mostly stolen from FastLED) **********************************
+	zylPel& 		setARGB(uint8_t na, uint8_t nr, uint8_t ng, uint8_t nb); 
+	zylPel& 		setAlpha(uint8_t na);
+	zylPel& 		setHue(uint8_t h);
+	zylPel& 		setHSV(uint8_t h, uint8_t s, uint8_t v);
+	zylPel& 		addToRGB(uint8_t d);
+	zylPel& 		subtractFromRGB(uint8_t d);
+	zylPel& 		nscale8(uint8_t scaledown);
+	static zylPel 	blend(const zylPel from, const zylPel to, const uint8_t amount);
 };
 
 #endif
