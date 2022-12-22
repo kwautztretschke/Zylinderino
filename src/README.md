@@ -1,25 +1,43 @@
 # MQTT general notes
-- as little states as possible, but reactors sending details for each light
-	- a python reactor for every piece of hardware -> derived classes depending on hardware (outlet, tasmota, my own stuff)
-- what logic should run on the ESP?
-	- do not distinguish between different lights/rooms/whatever
-		- do not subscribe to bedroom/color but instead have a reactor subscribe to bedroom/color and update all lights accordingly
-	- programs can run and receive input fine
+* as little states as possible, but reactors sending details for each light
+	* a python reactor for every piece of hardware -> derived classes depending on hardware (outlet, tasmota, my own stuff)
+* what logic should run on the ESP?
+	* do not distinguish between different lights/rooms/whatever
+		* do not subscribe to bedroom/color but instead have a reactor subscribe to bedroom/color and update all lights accordingly
+	* programs can run and receive input fine
 
 
 # ESP Firmware Requirements
 
-- MQTT Client ID based on Mac Address
-	- Name received as retained message on state/mac/<address>/name (or so)
-	- Setup and subscribe topics based on Name (or topics at state/mac/<address>/#)
+* MQTT Client ID based on Mac Address
+	* Name received as retained message on state/mac/<address>/name (or so)
+	* Setup and subscribe topics based on Name (or topics at state/mac/<address>/#)
 
-- MQTT broker needs fixed hostname (dns? no idea)
-- Messages have to be received at all times -> slim callback and loop functions
-- ZylProg-like behaviour
-	- zylProg.render() every loop
-	- received message gets passed as zylProg.input() and stuff like fade and transitions are calculated each render() step
-	-> opportunity to actually add zylProgs
+* MQTT broker needs fixed hostname (dns? no idea)
+* Messages have to be received at all times -> slim callback and loop functions
+* ZylProg-like behaviour
+	* zylProg.render() every loop
+	* received message gets passed as zylProg.input() and stuff like fade and transitions are calculated each render() step
+	*-> opportunity to actually add zylProgs
 
+### setup() and loop() outlines:
+setup()
+* connect to wifi
+* init OTA?
+* init MQTT client
+* subscribe to mac-address-topic
+	* while(true) mqttclient.loop() until name is received
+	* temporary callback (lambda?) -> our only job is to receive our name right now
+	* do stuff depending on who we are?
+* init all other stuff necessary (e.g. zylProgs)
+* set our proper mqttclient callback function
+* subscribe to all topics important for us
+	* prepare for a flood of retained messages? (-> have this be the last step?)
+
+loop()
+* mqttclient.loop()
+* program.render()
+* ota.handle()
 
 # MQTT topic tree
 all topics start with reactor/<name>/...
