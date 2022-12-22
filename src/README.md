@@ -48,14 +48,17 @@ all topics start with reactor/<name>/...
 * rainbow
 * fire
 * whatever
+
 /color
 * primary color
+
 /color/<number>
 * add as many colors as desirable for modes?
 * /color/1 has to be the same as /color -> backend
 * retained messages can be cleared by sending "" 
 	* which order do retained messages get sent when we subscribe to <name>/#?
 	* how to avoid colors 1, 2, 4 being set and 3 being unset? which ones to use? -> backend? reactors?
+
 /brightness
 
 ### RGBW strip or White/Warmwhite (?)
