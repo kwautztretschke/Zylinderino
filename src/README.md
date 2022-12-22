@@ -1,22 +1,45 @@
-# RGB-Strip Controller
-
-PCB Requirements:
-* 4x 12V PWM Transistors
-* 1/2 ARGB Pins + 5V supply
-* ESP8266 SMD traces 
-* 12V-5V Buck converter 
-
-
-
-Sketch is neither correct nor conventional, it's just to show the general layout and routing beforehand.
-The left half could be supplied with its own 5V supply, and then the right half with the buck converter, transistors and all 12V shenanigans could be broken off for a very tiny ARGB controller
-
-![photo_2022-06-12_12-32-20](https://user-images.githubusercontent.com/64223238/173229160-ac01e07d-10fc-4148-83ef-41045355bf88.jpg)
+# MQTT general notes
+- as little states as possible, but reactors sending details for each light
+	- a python reactor for every piece of hardware -> derived classes depending on hardware (outlet, tasmota, my own stuff)
+- what logic should run on the ESP?
+	- do not distinguish between different lights/rooms/whatever
+		- do not subscribe to bedroom/color but instead have a reactor subscribe to bedroom/color and update all lights accordingly
+	- programs can run and receive input fine
 
 
+# ESP Firmware Requirements
 
-Kicad ESP footprints used:  https://github.com/jdunmire/kicad-ESP8266
+- MQTT Client ID based on Mac Address
+	- Name received as retained message on state/mac/<address>/name (or so)
+	- Setup and subscribe topics based on Name (or topics at state/mac/<address>/#)
+
+- MQTT broker needs fixed hostname (dns? no idea)
+- Messages have to be received at all times
+- ZylProg-like behaviour
+	- zylProg.render() every loop
+	- received message gets passed as zylProg.input() and stuff like fade and transitions are calculated each render() step
+	-> opportunity to actually add zylProgs
 
 
+# MQTT topic tree
+all topics start with reactor/<name>/...
 
+## Monochrome RGB strip
+/program
+	- default
+	- rainbow
+	- fire
+	- whatever
+/color
+	- primary color
+/color/<number>
+	- add as many colors as desirable for modes?
+	- /color/1 has to be the same as /color -> backend
+	- retained messages can be cleared by sending "" 
+		- which order do retained messages get sent when we subscribe to <name>/#?
+		- how to avoid colors 1, 2, 4 being set and 3 being unset? which ones to use? -> backend? reactors?
+/brightness
 
+## RGBW strip or White/Warmwhite (?)
+/lighttemperature
+	- not sure about this, maybe communicate light temperature in /color instead?
