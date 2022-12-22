@@ -42,25 +42,25 @@ loop()
 # MQTT topic tree
 all topics start with reactor/<name>/...
 
-## Monochrome RGB strip
+### Monochrome RGB strip
 /program
-	- default
-	- rainbow
-	- fire
-	- whatever
+	* default
+	* rainbow
+	* fire
+	* whatever
 /color
-	- primary color
+	* primary color
 /color/<number>
-	- add as many colors as desirable for modes?
-	- /color/1 has to be the same as /color -> backend
-	- retained messages can be cleared by sending "" 
-		- which order do retained messages get sent when we subscribe to <name>/#?
-		- how to avoid colors 1, 2, 4 being set and 3 being unset? which ones to use? -> backend? reactors?
+	* add as many colors as desirable for modes?
+	* /color/1 has to be the same as /color -> backend
+	* retained messages can be cleared by sending "" 
+		* which order do retained messages get sent when we subscribe to <name>/#?
+		* how to avoid colors 1, 2, 4 being set and 3 being unset? which ones to use? -> backend? reactors?
 /brightness
 
-## RGBW strip or White/Warmwhite (?)
+### RGBW strip or White/Warmwhite (?)
 /lighttemperature
-	- not sure about this, maybe communicate light temperature in /color instead?
+	* not sure about this, maybe communicate light temperature in /color instead?
 
-## ARGB strip
+### ARGB strip
 shouldnt be too different from monochrome, from a MQTT API standpoint
