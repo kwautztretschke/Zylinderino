@@ -10,8 +10,8 @@
 # ESP Firmware Requirements
 
 * MQTT Client ID based on Mac Address
-	* Name received as retained message on state/mac/<address>/name (or so)
-	* Setup and subscribe topics based on Name (or topics at state/mac/<address>/#)
+	* Name received as retained message on state/mac/[address]/name (or so)
+	* Setup and subscribe topics based on Name (or topics at state/mac/[address]/#)
 
 * MQTT broker needs fixed hostname (dns? no idea)
 * Messages have to be received at all times -> slim callback and loop functions
@@ -40,7 +40,7 @@ loop()
 * ota.handle()
 
 # MQTT topic tree
-all topics start with reactor/<name>/...
+all topics start with reactor/[name]/...
 
 ### Monochrome RGB strip
 /program
@@ -52,11 +52,11 @@ all topics start with reactor/<name>/...
 /color
 * primary color
 
-/color/<number>
+/color/[number]
 * add as many colors as desirable for modes?
 * /color/1 has to be the same as /color -> backend
 * retained messages can be cleared by sending "" 
-	* which order do retained messages get sent when we subscribe to <name>/#?
+	* which order do retained messages get sent when we subscribe to [name]/#?
 	* how to avoid colors 1, 2, 4 being set and 3 being unset? which ones to use? -> backend? reactors?
 
 /brightness
