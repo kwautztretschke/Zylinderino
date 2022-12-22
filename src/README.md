@@ -14,7 +14,7 @@
 	- Setup and subscribe topics based on Name (or topics at state/mac/<address>/#)
 
 - MQTT broker needs fixed hostname (dns? no idea)
-- Messages have to be received at all times
+- Messages have to be received at all times -> slim callback and loop functions
 - ZylProg-like behaviour
 	- zylProg.render() every loop
 	- received message gets passed as zylProg.input() and stuff like fade and transitions are calculated each render() step
@@ -43,3 +43,6 @@ all topics start with reactor/<name>/...
 ## RGBW strip or White/Warmwhite (?)
 /lighttemperature
 	- not sure about this, maybe communicate light temperature in /color instead?
+
+## ARGB strip
+shouldnt be too different from monochrome, from a MQTT API standpoint
