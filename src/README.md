@@ -23,13 +23,12 @@
 ### setup() and loop() outlines:
 setup()
 * connect to wifi
-* init OTA?
 * init MQTT client
 * subscribe to mac-address-topic
 	* while(true) mqttclient.loop() until name is received
 	* temporary callback (lambda?) -> our only job is to receive our name right now
-	* do stuff depending on who we are?
-* init all other stuff necessary (e.g. zylProgs)
+	* do stuff depending on who we are
+* init all other stuff necessary (e.g. ArduinoOTA with hostname, or zylProgs)
 * set our proper mqttclient callback function
 * subscribe to all topics important for us
 	* prepare for a flood of retained messages? (-> have this be the last step?)
