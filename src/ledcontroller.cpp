@@ -6,7 +6,6 @@ namespace global{
 	const char* wifiSsid = "testwlan";
 	const char* wifiPassword = "amingus187";
 	const char* mqttServerIp = "192.168.43.150";
-	IPAddress staticIP(10,69,0,NETWORK_IP);
 	IPAddress gateway(10,69,0,1);
 	IPAddress subnet(255,255,255,0);
 }
@@ -15,7 +14,15 @@ class MqttClientClass{
 private:
 	WiFiClient		m_wifi;
 	PubSubClient 	m_client;
-	static void callback(char* topic, uint8_t* payload, unsigned int length);
+	static void callback(char* topic, uint8_t* payload, unsigned int length){
+		Serial.print("Message arrived [");
+		Serial.print(topic);
+		Serial.print("] ");
+		for (unsigned int i = 0; i < length; i++) {
+			Serial.print((char)payload[i]);
+		}
+		Serial.println();
+	}
 public:
 	void startWiFi(){
 		Serial.println();
@@ -61,8 +68,8 @@ public:
 
 class ProgramManagerClass{
 public:
-	static void init();
-	static void renderProgram();
+	static void init(){}
+	static void renderProgram(){}
 } ProgramManager;
 
 
