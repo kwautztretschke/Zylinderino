@@ -1,19 +1,15 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoOTA.h>
+#include <cstring>
 
-namespace global{
-	const char* wifiSsid = "testwlan";
-	const char* wifiPassword = "amingus187";
-	const char* mqttServerIp = "192.168.43.150";
-	IPAddress gateway(10,69,0,1);
-	IPAddress subnet(255,255,255,0);
-}
+#include "wificredentials.h"
 
 class MqttClientClass{
 private:
 	WiFiClient		m_wifi;
 	PubSubClient 	m_client;
+	String			m_mac_address;
 	static void callback(char* topic, uint8_t* payload, unsigned int length){
 		Serial.print("Message arrived [");
 		Serial.print(topic);
@@ -23,13 +19,38 @@ private:
 		}
 		Serial.println();
 	}
+	void reconnect(String mac_address) {
+		// Loop until we're reconnected
+		while (!m_client.connected()) {
+			Serial.print("Attempting MQTT connection...");
+			// Create a random client ID
+			String clientId = "ESP8266Client-";
+			clientId += mac_address;
+			// Attempt to connect
+			if (m_client.connect(clientId.c_str())) {
+			Serial.println("connected");
+			// Once connected, publish an announcement...
+			String mac_status_topic = "mac/" + mac_address + "/status";
+			m_client.publish((const char*)mac_status_topic.c_str(), "connected");
+			} else {
+			Serial.print("failed, rc=");
+			Serial.print(m_client.state());
+			Serial.println(" try again in 5 seconds");
+			// Wait 5 seconds before retrying
+			delay(5000);
+			}
+		}
+	}
 public:
 	void startWiFi(){
+		m_mac_address = WiFi.macAddress();
 		Serial.println();
+		Serial.print("MAC-Address: ");
+		Serial.println(m_mac_address);
 		Serial.print("Connecting to ");
-		Serial.println(global::wifiSsid);
+		Serial.println(wificredentials::ssid);
 		WiFi.mode(WIFI_STA);
-		WiFi.begin(global::wifiSsid, global::wifiPassword);
+		WiFi.begin(wificredentials::ssid, wificredentials::password);
 		while (WiFi.status() != WL_CONNECTED) {
 			Serial.print('.');
 			delay(500);
@@ -37,27 +58,43 @@ public:
 		Serial.print("Connected! IP address: ");
 		Serial.println(WiFi.localIP());
 		m_client.setClient(m_wifi);
-		m_client.setServer(global::mqttServerIp, 1883);
+		m_client.setServer(wificredentials::mqttServerIp, 1883);
+		reconnect(m_mac_address);
 	}
-	String receiveNameFromMacAddress(String mac_address){
-		String name;
+	String receiveNameFromMacAddress(){
+		char name[32] = {0};
+		bool name_received = false;
 		// set a temporary callback
 		m_client.setCallback(
-			[&name](char* topic, uint8_t* payload, unsigned int length){
-				name = (char*)payload;
+			[&name, &name_received](char* topic, uint8_t* payload, unsigned int length){
+				strncpy(name, (char*)payload, length);
+				name_received = true;
 			}
 		);
-		String mac_topic = "mac/" + mac_address + "/name";
-		m_client.subscribe((const char*)mac_topic.c_str());
+		// declare our status as searching
+		String mac_status_topic = "mac/" + m_mac_address + "/status";
+		m_client.publish((const char*)mac_status_topic.c_str(), "searching_name");
+		// subscribe to the appropriate topic
+		String mac_name_topic = "mac/" + m_mac_address + "/name";
+		m_client.subscribe((const char*)mac_name_topic.c_str());
+		Serial.print("Waiting to receive device name via ");
+		Serial.print(mac_name_topic);
 		// wait until a name is received
-		while(!name)
+		while(!name_received){
 			m_client.loop();
+			Serial.print(".");
+			delay(10);
+		}
 		// name received!
-		return name;
+		m_client.publish((const char*)mac_status_topic.c_str(), "ready");
+		Serial.println();
+		Serial.print("My name is ");
+		Serial.println(name);
+		return String(name);
 	}
 	void initWithName(String name){
 		m_client.setCallback(callback);
-		m_client.setServer(global::mqttServerIp, 1883);
+		m_client.setServer(wificredentials::mqttServerIp, 1883);
 		String reactor_topic = "reactor/" + name + "/#";
 		m_client.subscribe((const char*)reactor_topic.c_str());
 	}
@@ -77,8 +114,7 @@ void setup() {
 	Serial.begin(115200);
 	MqttClient.startWiFi();
 	// receive our name via a retained message under mac/<address>/name
-	String mac_address = "swag";
-	String device_name = MqttClient.receiveNameFromMacAddress(mac_address);
+	String device_name = MqttClient.receiveNameFromMacAddress();
 
 	// init other stuff
 	ArduinoOTA.setHostname((const char*)device_name.c_str());
