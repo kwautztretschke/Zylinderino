@@ -94,23 +94,9 @@ int getPacket(struct s_rgb *rgbN, struct s_rgb rgbC)
   // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
   if (packetSize) {
-    #ifdef PRINTPACKETS
-      Serial.printf("Received packet #%d of size %d from %s:%d\n  Arrived after %d seconds, first one since %d milliseconds\n  (to %s:%d, free heap = %d B)\n",
-                  packetCount, packetSize,
-                  millis()/60, millis()-previousTime,
-                  Udp.remoteIP().toString().c_str(), Udp.remotePort(),
-                  Udp.destinationIP().toString().c_str(), Udp.localPort(),
-                  ESP.getFreeHeap());
-    #endif
-
     // read the packet into packetBufffer
     int n = Udp.read(packetBuffer, PACKETBUFFERSIZE);
     packetBuffer[n] = 0;
-    
-    #ifdef PRINTPACKETS
-      Serial.printf("Contents: %d, %d, %d, %d\n", packetBuffer[0], packetBuffer[1], packetBuffer[2], packetBuffer[3]);
-    #endif
-    
     //parse Packet
     switch(packetBuffer[0]){
       case 0: //reboot
@@ -122,15 +108,6 @@ int getPacket(struct s_rgb *rgbN, struct s_rgb rgbC)
         rgbN->r = packetBuffer[1];
         rgbN->g = packetBuffer[2];
         rgbN->b = packetBuffer[3];
-        
-        #if 0
-        if(rgbC.brt==0){ //if the light is off, a new color should turn it on
-          rgbN->brt = 100;      
-        }else{
-          rgbN->brt = rgbC.brt;
-        }
-        #endif
-          
       break;
       
       case 2: //absolute brightness
@@ -163,63 +140,17 @@ int getPacket(struct s_rgb *rgbN, struct s_rgb rgbC)
 }
 void updateColors(struct s_rgb rgbN, struct s_rgb rgbC, int fade)
 {
-  //outdated! too lazy to fix since udpreplies dont work anyways
-  #ifdef UDPREPLIES
-    char string[64];
-    snprintf(string, 64, "c: %u, %u, %u, %u\n", (r*brt)/255, (g*brt)/255, (b*brt)/255, (w*brt)/255);
-    sendPacket(string);
-  #endif
-
-
   if(fade&&(rgbC.brt||rgbN.brt)){ //if the brightnesses are both 0, switch color immediately (for presets)
     for(int i=0; i<fade; i++){
-      #ifdef L_RGBW
-        if((rgbN.r==rgbN.g&&rgbN.g==rgbN.b) && (rgbC.r==rgbC.g&&rgbC.g==rgbC.b)){ // both colors are white:
-          analogWrite(LEDW, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
-          digitalWrite(LEDR, LOW); 
-          digitalWrite(LEDG, LOW); 
-          digitalWrite(LEDB, LOW);
-        }else if((rgbN.r==rgbN.g&&rgbN.g==rgbN.b) && (rgbC.r!=rgbC.g||rgbC.g!=rgbC.b)){           // new color is white:
-          analogWrite(LEDW, (((rgbN.r*rgbN.brt)/100) * i)/fade);
-          analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i))/fade);
-          analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i))/fade);
-          analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i))/fade);
-        }else if((rgbC.r==rgbC.g&&rgbC.g==rgbC.b) && (rgbN.r!=rgbN.g||rgbN.g!=rgbN.b)){           // old color is white:
-          analogWrite(LEDW, (((rgbC.r*rgbC.brt)/100) * (fade-i))/fade);
-          analogWrite(LEDR, (((rgbN.r*rgbN.brt)/100) * i)/fade);
-          analogWrite(LEDG, (((rgbN.g*rgbN.brt)/100) * i)/fade);
-          analogWrite(LEDB, (((rgbN.b*rgbN.brt)/100) * i)/fade);
-        }else{                                                                // update colors regularly
-          analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
-          analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
-          analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
-          digitalWrite(LEDW, LOW);
-        }
-      #else                                                                   // no WRGB fade
-        analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
-        analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
-        analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
-      #endif
-      delay(1);                                           // 1 millisecond delay, total delay = fade;
+		analogWrite(LEDR, (((rgbC.r*rgbC.brt)/100) * (fade-i)  +  ((rgbN.r*rgbN.brt)/100) * i)/fade);
+		analogWrite(LEDG, (((rgbC.g*rgbC.brt)/100) * (fade-i)  +  ((rgbN.g*rgbN.brt)/100) * i)/fade);
+		analogWrite(LEDB, (((rgbC.b*rgbC.brt)/100) * (fade-i)  +  ((rgbN.b*rgbN.brt)/100) * i)/fade);
+		delay(1);                                           // 1 millisecond delay, total delay = fade;
     }
   }else{        // switch color immediately
-    #ifdef L_RGBW
-      if(rgbN.r==rgbN.g&&rgbN.g==rgbN.b){    //new color is white
-        analogWrite(LEDW, (rgbN.r*rgbN.brt)/100);
-        digitalWrite(LEDR, LOW); 
-        digitalWrite(LEDG, LOW); 
-        digitalWrite(LEDB, LOW);
-      }else{                                 // update colors regularly
-        analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
-        analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
-        analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
-        digitalWrite(LEDW, LOW);
-      }
-    #else                                    // no WRGB update
-      analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
-      analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
-      analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
-    #endif
+	analogWrite(LEDR, (rgbN.r*rgbN.brt)/100);
+	analogWrite(LEDG, (rgbN.g*rgbN.brt)/100);
+	analogWrite(LEDB, (rgbN.b*rgbN.brt)/100);
   }
 }
 
@@ -254,10 +185,6 @@ void setup() {
   digitalWrite(LEDR, LOW);
   digitalWrite(LEDG, LOW);
   digitalWrite(LEDB, LOW);
-  #ifdef L_RGBW
-  pinMode(LEDW, OUTPUT);
-  digitalWrite(LEDW, LOW);
-  #endif
 
   Serial.println("Send four bytes, first the opcode, then the colors RGB");
   Serial.println();
@@ -333,14 +260,6 @@ void loop()
       }
     break;
   }
-  
-#if 0  
-  if(WiFi.status() != WL_CONNECTED) {
-    Serial.println("Wifi Disconnected!");
-    delay(500);
-  }
-#endif
-
   /*  OTA
    */
   ArduinoOTA.handle();
