@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name esp)(type Legacy)(uri ${KIPRJMOD}/../../libraries/kicad-ESP8266/ESP8266.lib)(options "")(descr ""))
+  (lib (name buckconverter)(type Legacy)(uri ${KIPRJMOD}/../../libraries/buckconverter/buckconverter.lib)(options "")(descr ""))
+)
