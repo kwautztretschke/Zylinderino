@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name K7803JT-500R3-LB)(type KiCad)(uri /home/bernie/proj/LED-Strip-Controller/kicad/libraries/buckconverter/K7803JT-500R3-LB.pretty)(options "")(descr ""))
+  (lib (name ESP8266)(type KiCad)(uri /home/bernie/proj/LED-Strip-Controller/kicad/libraries/kicad-ESP8266/ESP8266.pretty)(options "")(descr ""))
+  (lib (name buckconverter)(type KiCad)(uri /home/bernie/proj/LED-Strip-Controller/kicad/libraries/buckconverter/buckconverter.pretty)(options "")(descr ""))
+)
