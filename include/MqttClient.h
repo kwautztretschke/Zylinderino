@@ -13,9 +13,9 @@ private:
 	void 			connectMqtt(); 
 public:
 	const String 	getDeviceName() {return m_DeviceName;}
-	void startWiFi();
-	void init();
-	void loop(); 
+	void 			startWiFi();
+	void 			init();
+	void 			loop(); 
 };
 
 extern MqttClientClass MqttClient;

@@ -12,7 +12,8 @@ void MqttClientClass::callback(char* topic, uint8_t* payload, unsigned int lengt
 	Serial.println();
 }
 
-void MqttClientClass::connectMqtt() {
+
+void MqttClientClass::connectMqtt(){
 	// Loop until we're reconnected
 	while (!m_Client.connected()) {
 		Serial.print("Attempting MQTT connection...");
@@ -31,6 +32,7 @@ void MqttClientClass::connectMqtt() {
 		}
 	}
 }
+
 
 void MqttClientClass::startWiFi(){
 	String mac_address = WiFi.macAddress();
@@ -60,7 +62,8 @@ void MqttClientClass::init(){
 	m_Client.subscribe((const char*)reactor_topic.c_str());
 }
 
-void MqttClientClass::loop() {
+
+void MqttClientClass::loop(){
 	m_Client.loop();
 	if(!m_Client.connected())
 		connectMqtt();

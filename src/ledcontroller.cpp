@@ -2,16 +2,12 @@
 #include <PubSubClient.h>
 
 #include "MqttClient.h"
+#include "ProgramManager.h"
 
 
-class ProgramManagerClass{
-public:
-	static void init(){}
-	static void renderProgram(){}
-} ProgramManager;
 
 
-void setup() {
+void setup(){
 	Serial.begin(115200);
 	MqttClient.startWiFi();
 
@@ -24,7 +20,7 @@ void setup() {
 	MqttClient.init();
 }
 
-void loop() {
+void loop(){
 	MqttClient.loop();
 	ProgramManager.renderProgram();
 	ArduinoOTA.handle();
