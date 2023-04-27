@@ -6,15 +6,15 @@
 
 class MqttClientClass{
 private:
-	WiFiClient		m_wifi;
-	PubSubClient 	m_client;
-	String			m_mac_address;
-	static void callback(char* topic, uint8_t* payload, unsigned int length);
-	void reconnect(String mac_address); 
+	WiFiClient		m_WifiClient;
+	PubSubClient 	m_Client;
+	const String	m_DeviceName = "tollerESP";
+	static void 	callback(char* topic, uint8_t* payload, unsigned int length);
+	void 			connectMqtt(); 
 public:
+	const String 	getDeviceName() {return m_DeviceName;}
 	void startWiFi();
-	String receiveNameFromMacAddress();
-	void initWithName(String name);
+	void init();
 	void loop(); 
 };
 

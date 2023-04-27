@@ -1,4 +1,5 @@
 #include <ArduinoOTA.h>
+#include <PubSubClient.h>
 
 #include "MqttClient.h"
 
@@ -13,16 +14,14 @@ public:
 void setup() {
 	Serial.begin(115200);
 	MqttClient.startWiFi();
-	// receive our name via a retained message under mac/<address>/name
-	String device_name = MqttClient.receiveNameFromMacAddress();
 
 	// init other stuff
-	ArduinoOTA.setHostname((const char*)device_name.c_str());
+	ArduinoOTA.setHostname(MqttClient.getDeviceName().c_str());
 	ProgramManager.init();
 
 	// subscribe to all our topics at reactor/<name>/#
 	// (and begin handling the flood of retained messages)
-	MqttClient.initWithName(device_name);
+	MqttClient.init();
 }
 
 void loop() {
