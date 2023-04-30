@@ -21,7 +21,8 @@ private:
 	WiFiClient		m_WifiClient;
 	PubSubClient 	m_Client;
 	const String	m_DeviceName = wificredentials::deviceName;
-	static void 	mqttCallback(char* topic, uint8_t* payload, unsigned int length);
+	char			m_plBuffer[128] = {0};
+	void		 	handleMessage(char* topic, uint8_t* payload, unsigned int length);
 	void 			connectMqtt(); 
 	// callbacks
 	void			(*p_input)(char* key, char* value);
