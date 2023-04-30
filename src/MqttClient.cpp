@@ -1,8 +1,6 @@
 #include "MqttClient.h"
 
-#include "wificredentials.h"
-
-void MqttClientClass::callback(char* topic, uint8_t* payload, unsigned int length){
+void MqttClientClass::mqttCallback(char* topic, uint8_t* payload, unsigned int length){
 	Serial.print("Message arrived [");
 	Serial.print(topic);
 	Serial.print("] ");
@@ -10,6 +8,8 @@ void MqttClientClass::callback(char* topic, uint8_t* payload, unsigned int lengt
 		Serial.print((char)payload[i]);
 	}
 	Serial.println();
+	// topic is a null terminated string, payload is a bunch of bytes or null terminated string.
+	// maybe add a check if payload[length] == 0
 }
 
 
@@ -54,7 +54,7 @@ void MqttClientClass::init(){
 	// connect to mqtt broker
 	m_Client.setClient(m_WifiClient);
 	m_Client.setServer(wificredentials::mqttServerIp, 1883);
-	m_Client.setCallback(callback);
+	m_Client.setCallback(mqttCallback);
 	connectMqtt();
 	// Subscribe to all topics belonging to this reactor via
 	// reactor/<name>/#

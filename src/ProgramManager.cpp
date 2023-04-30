@@ -7,3 +7,10 @@ void ProgramManagerClass::init(){
 
 void ProgramManagerClass::renderProgram(){
 }
+
+int ProgramManagerClass::focus(char* program){
+	return 0;
+}
+
+void ProgramManagerClass::input(char* key, char* value){
+}

@@ -17,6 +17,9 @@ void setup(){
 
 	// subscribe to all our topics at reactor/<name>/#
 	// (and begin handling the flood of retained messages)
+	MqttClient.setInputCallback(ProgramManager.input);
+	MqttClient.setFocusCallback(ProgramManager.focus);
+	MqttClient.setRebootCallback(0);
 	MqttClient.init();
 }
 

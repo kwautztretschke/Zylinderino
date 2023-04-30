@@ -5,8 +5,10 @@
 
 class ProgramManagerClass{
 public:
-	static void init();
-	static void renderProgram();
+	static void 	init();
+	static void 	renderProgram();
+	static int		focus(char* program);
+	static void		input(char* key, char* value);
 };
 
 extern ProgramManagerClass ProgramManager;
