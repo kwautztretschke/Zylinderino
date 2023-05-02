@@ -2,7 +2,6 @@
 #define __MQTTCLIENT_H__
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <cstring>
 
 #include "wificredentials.h"
 
@@ -25,7 +24,7 @@ private:
 	void		 	handleMessage(char* topic, uint8_t* payload, unsigned int length);
 	void 			connectMqtt(); 
 	// callbacks
-	void			(*p_input)(char* key, char* value);
+	int				(*p_input)(char* key, char* value);
 	int				(*p_focus)(char* program);
 	void			(*p_reboot)();
 public:
@@ -34,7 +33,7 @@ public:
 	void 			init();
 	void 			loop(); 
 	// callbacks
-	void			setInputCallback(void (*input)(char* key, char* value)) {p_input = input;}
+	void			setInputCallback(int (*input)(char* key, char* value)) {p_input = input;}
 	void			setFocusCallback(int (*focus)(char* program)) {p_focus = focus;}
 	void			setRebootCallback(void (*reboot)()) {p_reboot = reboot;}
 };
