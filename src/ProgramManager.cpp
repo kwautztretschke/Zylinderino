@@ -45,17 +45,18 @@ void render(long tick){
 }
 
 int focus(char* name){
-	Serial.printf("Program Manager focusing program \"%s\"\n", name);
+	Serial.printf("Program Manager searching \"%s\"... ", name);
 	Program* ptr = s_pHead;
 	while(ptr){
-		if(strcmp(ptr->m_Name, name)){
-			Serial.printf("Found program \"%s\"\n", name);
+		if(!strcmp(ptr->m_Name, name)){
+			Serial.println("Found!");
 			s_pActive = ptr;
 			s_pActive->activate();
 			return 0;
 		}
 		ptr = ptr->m_pNext;
 	}
+	Serial.println("Error!");
 	return 1;
 }
 
@@ -71,6 +72,10 @@ void setColor(uint8_t* c){
 
 uint8_t* getColor() {
 	return s_Color;
+}
+
+uint8_t* getFB() {
+	return s_FB;
 }
 
 } // namespace ProgramManager

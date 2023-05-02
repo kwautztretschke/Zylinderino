@@ -16,6 +16,8 @@ void setup(){
 	// init other stuff
 	ArduinoOTA.setHostname(MqttClient.getDeviceName().c_str());
 	ProgramManager::init();
+	ProgramManager::initPrograms();
+	Hardware::init();
 
 	// init MqttClient and set callbacks to ProgramManager
 	MqttClient.setInputCallback(ProgramManager::input);
@@ -27,7 +29,8 @@ void setup(){
 void loop(){
 	MqttClient.loop();
 	ProgramManager::render(tick);
+	Hardware::display(ProgramManager::getFB());
 	ArduinoOTA.handle();
 	tick++;
-	delay(200);
+	delay(1);
 }

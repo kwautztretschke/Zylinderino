@@ -17,6 +17,7 @@ int			input(char* key, char* value);
 
 void		setColor(uint8_t* c);
 uint8_t*	getColor();
+uint8_t*	getFB();
 
 } // namespace ProgramManager
 
