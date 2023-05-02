@@ -6,7 +6,7 @@
 namespace wificredentials{
 	const String 	ssid = 			"dummerhotspot";
 	const String	password = 		"Amogus187";
-	const IPAddress mqttServerIp = 	IPAddress(10,42,0,141);
+	const IPAddress mqttServerIp = 	IPAddress(192,168,43,150);
 	const String	deviceName = 	"tollerESP";
 }
 

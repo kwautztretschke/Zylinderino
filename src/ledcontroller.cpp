@@ -3,6 +3,7 @@
 
 #include "MqttClient.h"
 #include "ProgramManager.h"
+#include "Hardware.h"
 
 
 long tick = 0;
@@ -25,7 +26,8 @@ void setup(){
 
 void loop(){
 	MqttClient.loop();
-	ProgramManager::render(NULL, tick);
+	ProgramManager::render(tick);
 	ArduinoOTA.handle();
 	tick++;
+	delay(200);
 }

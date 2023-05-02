@@ -1,3 +1,4 @@
+#include <HardwareSerial.h>
 #include "Program.h"
 
 static class : public Program{
@@ -8,6 +9,9 @@ public:
 		return 0;
 	}
 	void render(long ms){
-		m_Color
+		m_FB[0] =  ms 			% 255;
+		m_FB[1] = (ms + 85)		% 255;
+		m_FB[2] = (ms + 170)	% 255;
+		Serial.printf("Sampleprogram go brrrr %d\n", ms);
 	}
 } sampleProgram;

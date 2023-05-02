@@ -1,31 +1,23 @@
 #ifndef __PROGRAMMANAGER_H__
 #define __PROGRAMMANAGER_H__
 
+#include <stdint.h>
+
 class Program;
 
-class ProgramManager{
-private:
-	static int			m_Count;
-	static Program*		m_pHead;
-	static Program*		m_pActive;
-	//static zylPel				s_aColors[MAX_COLORS];
-	//static int					s_ActiveColorIndex;
-	static uint8_t		m_Color[3]; // TODO array of colors
-public:
-	static void			add(Program *ptr);
-	static int			initPrograms();
-	static int			init();
+namespace ProgramManager{
 
-	static void			render(uint8_t* fb, long tick);
-	static int			focus(char* program);
-	static int			input(char* key, char* value);
+void		add(Program *ptr);
+int			initPrograms();
+int			init();
 
-	static void			setColor(uint8_t* c){
-							for(int i=0;i<3;i++)
-								m_Color[i] = c[i];
-						}
-	static uint8_t*		getColor() {return m_Color;}
-};
+void		render(long tick);
+int			focus(char* program);
+int			input(char* key, char* value);
 
+void		setColor(uint8_t* c);
+uint8_t*	getColor();
+
+} // namespace ProgramManager
 
 #endif // __PROGRAMMANAGER_H__

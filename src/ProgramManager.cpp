@@ -3,32 +3,74 @@
 #include "ProgramManager.h"
 #include "Program.h"
 
-void ProgramManager::add(Program* ptr)
+
+namespace ProgramManager{
+	
+static int			s_Count = 0;
+static Program*		s_pHead = NULL;
+static Program*		s_pActive = NULL;
+static uint8_t		s_Color[3] = {0}; // TODO array of colors
+static uint8_t		s_FB[3]= {0}; //TODO framebuffer
+
+
+void add(Program* ptr)
 {	//call this in the constructor of your programs to add them to a list of all programs
-	ptr->m_pNext = 	m_pHead;
-	m_pHead = 		ptr;
-	m_Count++;
+	ptr->m_pNext = 	s_pHead;
+	s_pHead = 		ptr;
+	s_Count++;
 }
 
-int ProgramManager::init(){
+int init(){
 	Serial.println("Initializing Program Manager");
+	s_pActive = s_pHead;
 	return 0;
 }
 
-int ProgramManager::initPrograms(){
-	Serial.println("Initializing Programs");
-	return 0;
+int initPrograms(){
+	Serial.printf("initializing %d programs\n", s_Count);
+	int error=0;
+	Program* ptr = s_pHead;
+	for(int i=0; i<s_Count; i++){
+		error += ptr->init();
+		Serial.printf("Program \"%s\" at %p\n", ptr->m_Name, ptr);
+		ptr = ptr->m_pNext;
+	}
+	return error;
 }
 
-void ProgramManager::render(uint8_t* fb, long tick){
+void render(long tick){
+	s_pActive->render(tick);
+	for (int i=0;i<3;i++)
+		s_FB[i] = s_pActive->m_FB[i];
 }
 
-int ProgramManager::focus(char* program){
-	Serial.printf("Program Manager focusing program \"%s\"\n", program);
-	return 0;
+int focus(char* name){
+	Serial.printf("Program Manager focusing program \"%s\"\n", name);
+	Program* ptr = s_pHead;
+	while(ptr){
+		if(strcmp(ptr->m_Name, name)){
+			Serial.printf("Found program \"%s\"\n", name);
+			s_pActive = ptr;
+			s_pActive->activate();
+			return 0;
+		}
+		ptr = ptr->m_pNext;
+	}
+	return 1;
 }
 
-int ProgramManager::input(char* key, char* value){
+int input(char* key, char* value){
 	Serial.printf("Program Manager received input key=\"%s\", value=\"%s\"\n", key, value);
-	return 0;
+	return s_pActive->input(key, value);
 }
+
+void setColor(uint8_t* c){
+	for(int i=0;i<3;i++)
+		s_Color[i] = c[i];
+}
+
+uint8_t* getColor() {
+	return s_Color;
+}
+
+} // namespace ProgramManager
