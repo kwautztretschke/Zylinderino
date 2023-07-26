@@ -4,13 +4,14 @@
 #include <Arduino.h>
 
 #define LEDR 12
-#define LEDG 14
-#define LEDB 13
+#define LEDG 13
+#define LEDB 14
 
 namespace Hardware{
 
 int 		init();
-void		display(uint8_t* fb);
+void		display(uint8_t* fb, uint8_t brightness);
+void		turnOff();
 
 }
 

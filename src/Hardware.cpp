@@ -12,11 +12,19 @@ int init(){
 	return 0;
 }
 
-void display (uint8_t* fb){
-	analogWrite(LEDR, fb[0]);
-	analogWrite(LEDG, fb[1]);
-	analogWrite(LEDB, fb[2]);
+void display(uint8_t* fb, uint8_t brightness){
+	int r = (fb[0] * brightness) / 255;
+	int g = (fb[1] * brightness) / 255;
+	int b = (fb[2] * brightness) / 255;
+	analogWrite(LEDR, r);
+	analogWrite(LEDG, g);
+	analogWrite(LEDB, b);
 }
 
+void turnOff(){
+	digitalWrite(LEDR, LOW);
+	digitalWrite(LEDG, LOW);
+	digitalWrite(LEDB, LOW);
+}
 
 }
