@@ -1,9 +1,12 @@
 #include <ArduinoOTA.h>
 #include <PubSubClient.h>
+#include <ArtnetWiFi.h>
 
 #include "MqttClient.h"
 #include "ProgramManager.h"
 #include "Hardware.h"
+
+ArtnetWiFiReceiver ArtNet;
 
 
 long g_Tick = 0;
@@ -32,7 +35,8 @@ void setup(){
 	ProgramManager::init();
 	ProgramManager::initPrograms();
 	Hardware::init();
-	Serial.println("OTA, zylOs and Hardware initialized");
+	ArtNet.begin();
+	Serial.println("OTA, zylOs, Artnet and Hardware initialized");
 
 	// init MqttClient and set callbacks to ProgramManager
 	MqttClient.setPowerCallback(power);
@@ -42,6 +46,7 @@ void setup(){
 	MqttClient.setFocusCallback(ProgramManager::focus);
 	MqttClient.setRebootCallback(0);
 	MqttClient.init();
+	ArtNet.subscribe(0, ProgramManager::artnet);
 	Serial.println("Setup complete!");
 }
 
