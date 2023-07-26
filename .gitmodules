@@ -1,3 +1,9 @@
 [submodule "kicad/libraries/kicad-ESP8266"]
 	path = kicad/libraries/kicad-ESP8266
 	url = https://github.com/jdunmire/kicad-ESP8266
+[submodule "lib/zylOs"]
+	path = lib/zylOs
+	url = https://github.com/kwautztretschke/zylOs.git
+[submodule "lib/MqttClient"]
+	path = lib/MqttClient
+	url = https://github.com/kwautztretschke/MqttClient.git
