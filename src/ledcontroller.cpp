@@ -5,8 +5,7 @@
 #include "MqttClient.h"
 #include "ProgramManager.h"
 #include "Hardware.h"
-
-ArtnetWiFiReceiver ArtNet;
+#include "Fartnet.h"
 
 
 long g_Tick = 0;
@@ -26,19 +25,18 @@ void setup(){
 	// start communication
 	Serial.begin(115200);
 	MqttClient.startWiFi();
-	Serial.println("Wifi set up");
 
-	// init other stuff
 	ArduinoOTA.setHostname(MqttClient.getDeviceName().c_str());
 	ArduinoOTA.setPassword("swag");
 	ArduinoOTA.begin();
+
 	ProgramManager::init();
 	ProgramManager::initPrograms();
 	Hardware::init();
-	ArtNet.begin();
-	Serial.println("OTA, zylOs, Artnet and Hardware initialized");
 
-	// init MqttClient and set callbacks to ProgramManager
+	Fartnet.setDmxCallback(ProgramManager::artnet);
+	Fartnet.init(6454, 0);
+
 	MqttClient.setPowerCallback(power);
 	MqttClient.setBrightnessCallback(brightness);
 	MqttClient.setColorCallback(ProgramManager::setColor);
@@ -46,12 +44,13 @@ void setup(){
 	MqttClient.setFocusCallback(ProgramManager::focus);
 	MqttClient.setRebootCallback(0);
 	MqttClient.init();
-	ArtNet.subscribe(0, ProgramManager::artnet);
+
 	Serial.println("Setup complete!");
 }
 
 void loop(){
 	MqttClient.loop();
+	Fartnet.loop();
 	ProgramManager::render(g_Tick);
 	if (g_Power)
 		Hardware::display(ProgramManager::getFB(), g_Brightness);
