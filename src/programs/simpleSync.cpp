@@ -26,8 +26,10 @@ public:
 		m_Brightness = data[m_Channel];
 	}
 	void render(long ms){
-		for (int i=0;i<3;i++){
-			m_FB[i] = ((long)ProgramManager::getColor()[i] * m_Brightness) / 255;
+		CRGB c = ProgramManager::getColor();
+		c.nscale8(m_Brightness);
+		for (int i=0;i<FB_SIZE;i++){
+			m_FB[i] = c;
 		}
 	}
 } simpleSync;
