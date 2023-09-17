@@ -30,8 +30,9 @@ void setup(){
 	ArduinoOTA.setPassword("swag");
 	ArduinoOTA.begin();
 
-	ProgramManager::init();
 	ProgramManager::initPrograms();
+	ProgramManager::init();
+
 	Hardware::init();
 
 	Fartnet.setDmxCallback(ProgramManager::artnet);

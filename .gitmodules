@@ -7,3 +7,6 @@
 [submodule "lib/MqttClient"]
 	path = lib/MqttClient
 	url = https://github.com/kwautztretschke/MqttClient.git
+[submodule "lib/esp8266_ws2812_i2s"]
+	path = lib/esp8266_ws2812_i2s
+	url = https://github.com/JoDaNl/esp8266_ws2812_i2s.git

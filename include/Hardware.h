@@ -4,10 +4,6 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
-#define LEDR 12
-#define LEDG 13
-#define LEDB 14
-
 namespace Hardware{
 
 int 		init();
