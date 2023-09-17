@@ -2,6 +2,7 @@
 #define __HARDWARE_H__
 
 #include <Arduino.h>
+#include <FastLED.h>
 
 #define LEDR 12
 #define LEDG 13
@@ -10,7 +11,7 @@
 namespace Hardware{
 
 int 		init();
-void		display(uint8_t* fb, uint8_t brightness);
+void		display(CRGB* fb, uint8_t brightness);
 void		turnOff();
 
 }

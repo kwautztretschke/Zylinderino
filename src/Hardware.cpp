@@ -12,13 +12,11 @@ int init(){
 	return 0;
 }
 
-void display(uint8_t* fb, uint8_t brightness){
-	int r = (fb[0] * brightness) / 255;
-	int g = (fb[1] * brightness) / 255;
-	int b = (fb[2] * brightness) / 255;
-	analogWrite(LEDR, r);
-	analogWrite(LEDG, g);
-	analogWrite(LEDB, b);
+void display(CRGB* fb, uint8_t brightness){
+	CRGB c = fb->scale8(brightness);
+	analogWrite(LEDR, c.r);
+	analogWrite(LEDG, c.g);
+	analogWrite(LEDB, c.b);
 }
 
 void turnOff(){
