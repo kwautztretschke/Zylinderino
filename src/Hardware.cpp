@@ -15,9 +15,10 @@ int init(){
 
 void display(CRGB* fb, uint8_t brightness){
 	for(int i=0;i<FB_SIZE;i++){
-		pixels[i].R = fb[i].r;
-		pixels[i].G = fb[i].g;
-		pixels[i].B = fb[i].b;
+		CRGB c = fb[i].nscale8(brightness);
+		pixels[i].R = c.r;
+		pixels[i].G = c.g;
+		pixels[i].B = c.b;
 	}
 	leds.show(pixels);
 }

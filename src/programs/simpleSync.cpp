@@ -12,7 +12,7 @@ public:
 		return 0;
 	}
 	int input(char* key, char* value){
-		if(strcmp(key, "channel"))
+		if(!strcmp(key, "channel"))
 			m_Channel = strtol(value, NULL, 10);
 		else{
 			// wrong input
