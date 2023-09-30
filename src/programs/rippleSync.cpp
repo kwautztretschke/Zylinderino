@@ -95,7 +95,7 @@ public:
 			return;
 		m_FrameCounter = 0;
 
-		CRGB c = ProgramManager::getColor(m_ColorIndex);
+		CRGB c = getColor();
 		c.nscale8(m_ArtnetHelper.getModulator());
 		switch(m_Mode){
 			case R2L:
