@@ -12,7 +12,9 @@ public:
 		return 0;
 	}
 	int input(char* key, char* value){
-		if (m_ArtnetHelper.input(key, value))
+		if (!Program::input(key, value))
+			return 0; //input was handled by program (e.g. colorindex)
+		if (!m_ArtnetHelper.input(key, value))
 			return 0; //input was handled by artnethelper
 		return 1; //no matching input found
 	}
