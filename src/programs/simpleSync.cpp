@@ -2,20 +2,26 @@
 #include <string.h>
 #include <stdlib.h>
 
-static class : public ArtnetProgram{
+static class : public Program{
 private:
-	char m_ArtNetHistory[32] = {0};
+	uint8_t m_ArtNetHistory[32] = {0};
+	ArtnetHelper m_ArtnetHelper = ArtnetHelper(m_ArtNetHistory, 32);
 public:
-	using ArtnetProgram::ArtnetProgram;
 	int init(){
 		m_Name = "simpleSync";
-		m_pArtNetHistory = m_ArtNetHistory;
-		m_ArtNetHistorySize = 32;
 		return 0;
+	}
+	int input(char* key, char* value){
+		if (m_ArtnetHelper.input(key, value))
+			return 0; //input was handled by artnethelper
+		return 1; //no matching input found
+	}
+	void artnet(const uint8_t* data, const uint16_t size){
+		m_ArtnetHelper.artnet(data, size);
 	}
 	void render(long ms){
 		CRGB c = getColor();
-		c.nscale8(getModulator());
+		c.nscale8(m_ArtnetHelper.getModulator());
 		for (int i=0;i<FB_SIZE;i++){
 			m_FB[i] = c;
 		}
