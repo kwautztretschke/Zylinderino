@@ -3,12 +3,14 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
+#include "ZylOsConfig.h"
 
 namespace Hardware{
 
 int 		init();
-void		display(CRGB* fb, uint8_t brightness);
+void		display(CRGB fb[X_RES][Y_RES], uint8_t brightness);
 void		turnOff();
+int			getDipSwitch(int num);
 
 }
 
