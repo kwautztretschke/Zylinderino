@@ -2,7 +2,7 @@
  *
  *
  *  \file      buchstabenyolo.h
- *  \author    Bernhard Stöffler
+ *  \author    Victoria Stöffler
  *  \date      2021-03-01
  */
 #ifndef __BUCHSTABENYOLO_H__
