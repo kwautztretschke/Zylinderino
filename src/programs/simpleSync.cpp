@@ -24,8 +24,8 @@ public:
 	void render(long ms){
 		CRGB c = getColor();
 		c.nscale8(m_ArtnetHelper.getModulator());
-		for (int i=0;i<FB_SIZE;i++){
-			m_FB[i] = c;
-		}
+		for(int x=0; x<X_RES; x++)
+			for(int y=0; y<Y_RES; y++)
+				m_FB[x][y] = c;
 	}
 } simpleSync;
