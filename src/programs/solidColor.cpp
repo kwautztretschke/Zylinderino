@@ -1,35 +1,21 @@
-/**
- * @file sampleProgram.cpp
- * @author Bernhard Stöffler
- * @brief 
- * @version 0.1
- * @date 2021-11-15
- * 
- * @copyright Copyright (c) 2021
- * 
- */
+#include "Program.h"
 
-#include "zylProg.h"
-
-static class : public zylProg{
+static class : public Program{
 public:
-	using 		zylProg::zylProg;
-	int			m_ColorIndex = 0;
-
-	void input(uint8_t x, uint8_t y, uint8_t z){
-		switch(x){
-		case 1:
-			m_ColorIndex = y;
-			break;
-		}
-	}
+	using Program::Program;
 	int init(){
-		m_Id = 0;
+		m_Name = "solidColor";
 		return 0;
 	}
-	void render(){
+	int input(char* key, char* value){
+		if (!Program::input(key, value))
+			return 0; //input was handled by program (e.g. colorindex)
+		return 1;
+	}
+	void render(long ms){
+		CRGB c = getColor();
 		for(int x=0; x<X_RES; x++)
 			for(int y=0; y<Y_RES; y++)
-				m_FB[x][y] = zylProgManager::getColor(m_ColorIndex);
+				m_FB[x][y] = c;
 	}
 } solidColor;

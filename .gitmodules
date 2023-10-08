@@ -1,0 +1,6 @@
+[submodule "lib/zylOs"]
+	path = lib/zylOs
+	url = https://github.com/kwautztretschke/zylOs.git
+[submodule "lib/MqttClient"]
+	path = lib/MqttClient
+	url = https://github.com/kwautztretschke/MqttClient.git
