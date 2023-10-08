@@ -2,7 +2,6 @@
 
 static class : public Program{
 public:
-	int m_ColorIndex = 0;
 	using Program::Program;
 	int init(){
 		m_Name = "solidColor";
