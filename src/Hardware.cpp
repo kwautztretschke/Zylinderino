@@ -5,8 +5,8 @@
 #define LED_MAX_MILLIAMPS 		500                //Maximum current provided by power source
 #define GLOBAL_BRIGHTNESS 		32                  //Scales down overall brightness
 
-#define NUM_LEDS 				270                 //Total number of Leds
-#define DATA_PIN 				26                  //Led data pin
+#define NUM_LEDS 				336                 //Total number of Leds
+#define DATA_PIN 				13                  //Led data pin
 #define DIP1_PIN				33					//Dipswitches
 #define DIP2_PIN				32
 #define DIP3_PIN				35
@@ -14,8 +14,6 @@
 
 namespace Hardware{
 
-static const int s_aRes[8] = {32, 33, 33, 34, 34, 34, 35, 35};		// Number of LEDs in each row 
-static const int s_aOff[8] = {0, 32, 65, 98, 132, 166, 200, 235};	// indices of first LED in row
 static CRGB s_aLeds[NUM_LEDS] = {0};
 
 int init(){
@@ -36,9 +34,9 @@ int init(){
 
 void display(CRGB fb[X_RES][Y_RES], uint8_t brightness){
 	// map coordinates
-	for(int y=0; y<8&&y<Y_RES; y++){
-		for (int x=0; x<s_aRes[y]&&x<X_RES; x++){
-			s_aLeds[s_aOff[y] + x] = fb[x][7-y].nscale8(brightness); 		//flip y values because of OpenGL indexing
+	for (int x = 0; x < X_RES; x++){
+		for (int y = 0; y < Y_RES; y++){
+			s_aLeds[x*Y_RES + abs(6*((x+1)%2)-y)] = fb[x][y];
 		}
 	}
 	FastLED.show();
