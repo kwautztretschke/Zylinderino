@@ -6,6 +6,7 @@ static class : public Program{
 private:
 	uint8_t m_HotButtons[16] = {0};
 	uint8_t m_Strips = 1;
+	uint8_t m_Offset = 0;
 	enum Orientation{H, V} m_Orientation = H;
 public:
 	int init(){
@@ -23,6 +24,14 @@ public:
 				m_Strips = 1;
 			return 0;
 		}
+		if(!strcmp(key, "offset")){
+			m_Offset = strtol(value, NULL, 10);
+			if(m_Offset > 15)
+				m_Offset = 15;
+			if(m_Offset < 0)
+				m_Offset = 0;
+			return 0;
+		}
 		if(!strcmp(key, "orientation")){
 			m_Orientation = value[0] == 'V' ? V : H;
 			return 0;
@@ -32,7 +41,7 @@ public:
 	void artnet(const uint8_t* data, const uint16_t size){
 		if(size < 80)
 			return;
-		memcpy(m_HotButtons, data+64, 16);
+		memcpy(m_HotButtons, data+64+m_Offset, 16-m_Offset);
 	}
 	void render(long ms){
 		// first reset everything
