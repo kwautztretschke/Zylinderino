@@ -18,9 +18,9 @@ private:
 		H,
 		V
 	} m_Orientation = H;
-	uint8_t m_Fade = 128;
+	uint8_t m_Fade = 10;
 	int m_FrameCounter = 0;
-	int m_Interval = 20; // only dim once every n frames //TODO hacky!
+	int m_Interval = 1; // only dim once every n frames //TODO hacky!
 public:
 	using Program::Program;
 	int init(){
@@ -128,7 +128,7 @@ public:
 			m_FrameCounter = 0;
 			for(int x=0; x<X_RES; x++)
 				for(int y=0; y<Y_RES; y++)
-					m_FB[x][y].nscale8(m_Fade); //slowly dim all pixels
+					m_FB[x][y].subtractFromRGB(m_Fade); //slowly dim all pixels
 		}
 		CRGB color = getColor();
 		if(m_Orientation == V){

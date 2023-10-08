@@ -2,8 +2,8 @@
 #include "ZylOsConfig.h"
 
 #define LED_VOLTAGE 			5                   //Led voltage
-#define LED_MAX_MILLIAMPS 		1000                //Maximum current provided by power source
-#define GLOBAL_BRIGHTNESS 		10                  //Scales down overall brightness
+#define LED_MAX_MILLIAMPS 		500                //Maximum current provided by power source
+#define GLOBAL_BRIGHTNESS 		32                  //Scales down overall brightness
 
 #define NUM_LEDS 				270                 //Total number of Leds
 #define DATA_PIN 				26                  //Led data pin
