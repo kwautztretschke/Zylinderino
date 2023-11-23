@@ -6,6 +6,6 @@
 // #define FB_SIZE 280
 #define X_RES 35
 #define Y_RES 8
-#define Z_DEFAULT_PROGRAM "solidColor"
+#define Z_DEFAULT_PROGRAM "fire"
 
 #endif // __ZYLOSCONFIG_H__

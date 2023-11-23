@@ -9,6 +9,7 @@
 
 
 long g_Tick = 0;
+int g_ProgIndex = 0;
 
 bool g_Power = true;
 uint8_t g_Brightness = 255;
@@ -24,40 +25,59 @@ void brightness(uint8_t brightness){
 void setup(){
 	// start communication
 	Serial.begin(115200);
-	MqttClient.startWiFi();
+	// MqttClient.startWiFi();
 
-	ArduinoOTA.setHostname(MqttClient.getDeviceName().c_str());
-	ArduinoOTA.setPassword("swag");
-	ArduinoOTA.begin();
+	// ArduinoOTA.setHostname(MqttClient.getDeviceName().c_str());
+	// ArduinoOTA.setPassword("swag");
+	// ArduinoOTA.begin();
 
 	ProgramManager::initPrograms();
 	ProgramManager::init();
 
 	Hardware::init();
 
-	Fartnet.setDmxCallback(ProgramManager::artnet);
-	Fartnet.init(6454, 0);
+	// Fartnet.setDmxCallback(ProgramManager::artnet);
+	// Fartnet.init(6454, 0);
 
-	MqttClient.setPowerCallback(power);
-	MqttClient.setBrightnessCallback(brightness);
-	MqttClient.setColorCallback([](uint8_t i, uint8_t *c){ProgramManager::setColor(i, CRGB(c[0], c[1], c[2]));});
-	MqttClient.setInputCallback(ProgramManager::input);
-	MqttClient.setFocusCallback(ProgramManager::focus);
-	MqttClient.setRebootCallback(0);
-	MqttClient.init();
+	// MqttClient.setPowerCallback(power);
+	// MqttClient.setBrightnessCallback(brightness);
+	// MqttClient.setColorCallback([](uint8_t i, uint8_t *c){ProgramManager::setColor(i, CRGB(c[0], c[1], c[2]));});
+	// MqttClient.setInputCallback(ProgramManager::input);
+	// MqttClient.setFocusCallback(ProgramManager::focus);
+	// MqttClient.setRebootCallback(0);
+	// MqttClient.init();
 
 	Serial.println("Setup complete!");
 }
 
 void loop(){
-	MqttClient.loop();
-	Fartnet.loop();
+	// MqttClient.loop();
+	// Fartnet.loop();
 	ProgramManager::render(g_Tick);
 	if (g_Power)
 		Hardware::display(ProgramManager::getFB(), g_Brightness);
 	else
 		Hardware::turnOff();
-	ArduinoOTA.handle();
+	// ArduinoOTA.handle();
 	g_Tick++;
 	delay(1);
+
+	if(g_Tick % 400 == 0){
+		Serial.println("Next Program");
+		switch (g_ProgIndex)
+		{
+		case 0:
+			ProgramManager::focus("rainbow");
+			break;
+		case 1:
+			ProgramManager::focus("noise");
+			break;
+		case 2:
+			ProgramManager::focus("fire");
+			break;
+		}
+		g_ProgIndex++;
+		if(g_ProgIndex > 2)
+			g_ProgIndex = 0;
+	}
 }
